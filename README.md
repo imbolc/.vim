@@ -16,10 +16,5 @@ Create simlink:
     
     ln -s ~/.vim/.vimrc ~
 
-Setup Vundle:
 
-    git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-
-Install bundles (from vim):
-
-    :BundleInstall
+In the first start vim will install bundles automatically.
