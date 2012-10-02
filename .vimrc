@@ -37,20 +37,24 @@
     "set confirm             " Включение диалогов с запросами
 
 " --- Indent
-    "set smarttab      " в случае включения этой опции, нажатие Tab в начале строки (если быть точнее, до первого непробельного символа в строке) приведет к добавлению отступа, ширина которого соответствует shiftwidth (независимо от значений в tabstop и softtabstop). Нажатие на Backspace удалит отступ, а не только один символ, что очень полезно при включенной expandtab. Напомню: опция оказывает влияние только на отступы в начале строки, в остальных местах используются значения из tabstop и softtabstop.
-    "set tabstop=4     " количество пробелов, которыми символ табуляции отображается в тексте. Оказывает влияние как на уже существующие табуляции, так и на новые. В случае изменения значения, «на лету» применяется к тексту
-    "set softtabstop=4 " количество пробелов, которыми символ табуляции отображается при добавлении. Несмотря на то, что при нажатии на Tab вы получите ожидаемый результат (добавляется новый символ табуляции), фактически в отступе могут использоваться как табуляция так и пробелы. Например, при установленных tabstop равной 8 и softtabstop равной 4, троекратное нажатие Tab приведет к добавлению отступа шириной 12 пробелов, однако сформирован он будет из одного символа табуляции и 4 пробелов.
-    "set expandtab     " в режиме вставки заменяет символ табуляции на соответствующее количество пробелов. Так же влияет на отступы, добавляемые командами >> и <<
-    "set shiftwidth=4  " по умолчанию используется для регулирование ширины отступов в пробелах, добавляемых командами >> и <<. Если значение опции не равно tabstop, как и в случае с softtabstop, отступ может состоять как из символов табуляций так и из пробелов. При включении опции — smarttab, оказывает дополнительное влияние.
+    set smarttab      " в случае включения этой опции, нажатие Tab в начале строки (если быть точнее, до первого непробельного символа в строке) приведет к добавлению отступа, ширина которого соответствует shiftwidth (независимо от значений в tabstop и softtabstop). Нажатие на Backspace удалит отступ, а не только один символ, что очень полезно при включенной expandtab. Напомню: опция оказывает влияние только на отступы в начале строки, в остальных местах используются значения из tabstop и softtabstop.
+    set tabstop=4     " количество пробелов, которыми символ табуляции отображается в тексте. Оказывает влияние как на уже существующие табуляции, так и на новые. В случае изменения значения, «на лету» применяется к тексту
+    set softtabstop=4 " количество пробелов, которыми символ табуляции отображается при добавлении. Несмотря на то, что при нажатии на Tab вы получите ожидаемый результат (добавляется новый символ табуляции), фактически в отступе могут использоваться как табуляция так и пробелы. Например, при установленных tabstop равной 8 и softtabstop равной 4, троекратное нажатие Tab приведет к добавлению отступа шириной 12 пробелов, однако сформирован он будет из одного символа табуляции и 4 пробелов.
+    set expandtab     " в режиме вставки заменяет символ табуляции на соответствующее количество пробелов. Так же влияет на отступы, добавляемые командами >> и <<
+    set shiftwidth=4  " по умолчанию используется для регулирование ширины отступов в пробелах, добавляемых командами >> и <<. Если значение опции не равно tabstop, как и в случае с softtabstop, отступ может состоять как из символов табуляций так и из пробелов. При включении опции — smarttab, оказывает дополнительное влияние.
     set autoindent    " копирует отступы с текущей строки при добавлении новой
     "
-    au BufRead,BufNewFile *.ejs setfiletype html
-    au BufRead,BufNewFile *.json setfiletype javascript
-    autocmd FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
-    autocmd FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
-    autocmd FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
-    autocmd FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
-    autocmd FileType javascript setlocal et sw=2 ts=2 sts=2 " textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
+    au BufRead,BufNewFile *.ejs		setlocal filetype=html
+    au BufRead,BufNewFile *.json 	setlocal filetype=javascript
+    au BufRead,BufNewFile *.md  	setlocal filetype=markdown
+
+    au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
+    au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
+    au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
+    au FileType markdown   setlocal et sw=4 ts=4 sts=4
+    au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
+    au FileType javascript setlocal et sw=2 ts=2 sts=2 " textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
+    
 
 
 " --- Encoding
@@ -120,6 +124,8 @@
     Bundle 'scrooloose/nerdcommenter'
     Bundle 'scrooloose/nerdtree'
 
+    Bundle 'imbolc/vim-markdown-preview'
+    au FileType markdown map <F5> :call MarkdownPreview()<CR>
 
 " --- omnicomletion
     autocmd FileType python set omnifunc=pythoncomplete#Complete
