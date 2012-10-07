@@ -121,17 +121,16 @@
     Bundle 'msanders/snipmate.vim'
     let snippets_dir = '~/.vim/snippets'
 
+    Bundle 'ervandew/supertab'
+
     Bundle 'scrooloose/nerdcommenter'
     Bundle 'scrooloose/nerdtree'
 
     Bundle 'imbolc/vim-markdown-preview'
     au FileType markdown map <F5> :call MarkdownPreview()<CR>
 
-" --- omnicomletion
-    autocmd FileType python set omnifunc=pythoncomplete#Complete
-    autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-    autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+    " коммандный режим в русской раскладке
+    Bundle 'powerman/vim-plugin-ruscmd'
 
 imap <F5> <Esc><F5>
 
@@ -145,78 +144,6 @@ imap <F5> <Esc><F5>
     nnoremap <Insert>   :set nopaste<CR><Insert>
     imap <F4> <C-O>:set paste<CR>
     set pastetoggle=<xF4>
-
-" переопределяю leader key
-    "let mapleader = " "
-
-
-" Setting up the command mode in russian layout
-    map ё `
-    map й q
-    map ц w
-    map у e
-    map к r
-    map е t
-    map н y
-    map г u
-    map ш i
-    map щ o
-    map з p
-    map х [
-    map ъ ]
-    map ф a
-    map ы s
-    map в d
-    map а f
-    map п g
-    map р h
-    map о j
-    map л k
-    map д l
-    map ж ;
-    map э '
-    map я z
-    map ч x
-    map с c
-    map м v
-    map и b
-    map т n
-    map ь m
-    map б ,
-    map ю .
-    map Ё ~
-    map Й Q
-    map Ц W
-    map У E
-    map К R
-    map Е T
-    map Н Y
-    map Г U
-    map Ш I
-    map Щ O
-    map З P
-    map Х {
-    map Ъ }
-    map Ф A
-    map Ы S
-    map В D
-    map А F
-    map П G
-    map Р H
-    map О J
-    map Л K
-    map Д L
-    map Ж :
-    map Э "
-    map Я Z
-    map Ч X
-    map С C
-    map М V
-    map И B
-    map Т N
-    map Ь M
-    map Б <
-    map Ю >
 
 " Удалить пробелы в конце строк
     function! RemoveTrailingSpaces()
