@@ -40,8 +40,8 @@ snippet case
 	${3}
 # for (...) {...}
 snippet for
-	for (var ${2:i} = 0, ${3:l} = ${1:list}.length; $2 < $3; $2${4:++}) {
-		${5:$1[$2]}
+	for (var ${2:i} = 0; $2 < ${1:list}.length; $2${4:++}) {
+		var v = ${5:$1[$2]};
 	}
 # for (...) {...} (Improved Native For-Loop)
 snippet forr

@@ -81,7 +81,7 @@
     au BufEnter *.py :call RemoveTrailingSpaces()
 
     " подсвечиваем строки длиннее 80 символов
-    au FileType python highlight OverLength ctermbg=darkred ctermfg=white
+    au FileType python highlight OverLength ctermbg=darkblue ctermfg=white
     au FileType python match OverLength /\%80v.\+/
 
     " запуск скриптов
