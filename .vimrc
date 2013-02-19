@@ -19,6 +19,7 @@
     set nocompatible
     set nowrap
     set novisualbell
+    set t_vb=
     set backspace=indent,eol,start whichwrap+=<,>,[,]
     set nobackup            " Не создавать резервные копии файлов
     set noswapfile
@@ -126,8 +127,8 @@
     Bundle 'scrooloose/nerdcommenter'
     Bundle 'scrooloose/nerdtree'
 
-    Bundle 'imbolc/vim-markdown-preview'
-    au FileType markdown map <F5> :call MarkdownPreview()<CR>
+    "Bundle 'imbolc/vim-markdown-preview'
+    "au FileType markdown map <F5> :call MarkdownPreview()<CR>
 
     " коммандный режим в русской раскладке
     Bundle 'powerman/vim-plugin-ruscmd'
