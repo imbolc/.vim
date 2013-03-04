@@ -111,7 +111,8 @@
 
     " запуск скриптов
     au FileType javascript map <F5> :w\|!node %<cr>
-
+    
+    Bundle 'hallettj/jslint.vim'
     " http://www.vim.org/scripts/script.php?script_id=3081
     Bundle 'vim-scripts/JavaScript-Indent'
 
