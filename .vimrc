@@ -117,7 +117,7 @@
     Bundle 'vim-scripts/JavaScript-Indent'
 
 " --- Plugins
-    Bundle 'noah/vim256-color.git'
+    Bundle 'noah/vim256-color'
     set t_Co=256
 
     Bundle 'msanders/snipmate.vim'
@@ -161,4 +161,4 @@ imap <F5> <Esc><F5>
         :BundleInstall
     endif
 
-color wombat256
+color wombat256mod
