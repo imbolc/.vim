@@ -46,15 +46,16 @@
     set autoindent    " копирует отступы с текущей строки при добавлении новой
     "
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
-    au BufRead,BufNewFile *.json 	setlocal filetype=javascript
+    "au BufRead,BufNewFile *.json 	setlocal filetype=javascript
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
+    au BufRead,BufNewFile *.json  	JSHintToggle disable
 
     au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
     au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
     au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
     au FileType markdown   setlocal et sw=4 ts=4 sts=4
     au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
-    au FileType javascript setlocal et sw=2 ts=2 sts=2 " textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
+    "au FileType javascript setlocal et sw=2 ts=2 sts=2 " textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
     
 
 
@@ -112,9 +113,13 @@
     " запуск скриптов
     au FileType javascript map <F5> :w\|!node %<cr>
     
+    "Bundle 'elzr/vim-json'
     Bundle 'hallettj/jslint.vim'
     " http://www.vim.org/scripts/script.php?script_id=3081
     Bundle 'vim-scripts/JavaScript-Indent'
+
+" --- JADE
+    Bundle 'digitaltoad/vim-jade'
 
 " --- Plugins
     Bundle 'noah/vim256-color'
