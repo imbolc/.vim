@@ -44,11 +44,9 @@
     set expandtab     " в режиме вставки заменяет символ табуляции на соответствующее количество пробелов. Так же влияет на отступы, добавляемые командами >> и <<
     set shiftwidth=4  " по умолчанию используется для регулирование ширины отступов в пробелах, добавляемых командами >> и <<. Если значение опции не равно tabstop, как и в случае с softtabstop, отступ может состоять как из символов табуляций так и из пробелов. При включении опции — smarttab, оказывает дополнительное влияние.
     set autoindent    " копирует отступы с текущей строки при добавлении новой
-    "
+    
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
-    "au BufRead,BufNewFile *.json 	setlocal filetype=javascript
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
-    au BufRead,BufNewFile *.json  	JSHintToggle disable
 
     au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
     au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
@@ -97,14 +95,15 @@
     Bundle 'vim-scripts/pyflakes.vim'
 
 " --- HTML
+    " http://www.vim.org/scripts/script.php?script_id=2075
+    "Bundle 'vim-scripts/indenthtml.vim'
+    Bundle 'othree/html5.vim'
+
+" --- JS
     " подсвечиваем строки длиннее 80 символов
     au FileType javascript highlight OverLength ctermbg=darkred ctermfg=white
     au FileType javascript match OverLength /\%80v.\+/
 
-    " http://www.vim.org/scripts/script.php?script_id=2075
-    Bundle 'vim-scripts/indenthtml.vim'
-
-" --- JS
     " перед сохранением вырезаем пробелы на концах
     au BufWritePre *.js normal m`:%s/\s\+$//e ``
     " удалем пробелы на концах строк 
@@ -113,13 +112,12 @@
     " запуск скриптов
     au FileType javascript map <F5> :w\|!node %<cr>
     
-    "Bundle 'elzr/vim-json'
     Bundle 'hallettj/jslint.vim'
     " http://www.vim.org/scripts/script.php?script_id=3081
     Bundle 'vim-scripts/JavaScript-Indent'
 
-" --- JADE
-    Bundle 'digitaltoad/vim-jade'
+    " disable jsLint for json
+    au BufRead,BufNewFile *.json 	let g:JSLintHighlightErrorLine = 0
 
 " --- Plugins
     Bundle 'noah/vim256-color'
@@ -132,9 +130,6 @@
 
     Bundle 'scrooloose/nerdcommenter'
     Bundle 'scrooloose/nerdtree'
-
-    "Bundle 'imbolc/vim-markdown-preview'
-    "au FileType markdown map <F5> :call MarkdownPreview()<CR>
 
     " коммандный режим в русской раскладке
     Bundle 'powerman/vim-plugin-ruscmd'
