@@ -53,7 +53,7 @@
     au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
     au FileType markdown   setlocal et sw=4 ts=4 sts=4
     au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
-    "au FileType javascript setlocal et sw=2 ts=2 sts=2 " textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
+    "au FileType javascript setlocal et sw=2 ts=2 sts=2 textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
     
 
 
@@ -123,7 +123,11 @@
     Bundle 'noah/vim256-color'
     set t_Co=256
 
-    Bundle 'msanders/snipmate.vim'
+    " snipmate
+    " snippets repo: https://github.com/honza/vim-snippets
+    Bundle 'vim-addon-mw-utils'
+    Bundle 'tomtom/tlib_vim'
+    Bundle 'garbas/vim-snipmate'
     let snippets_dir = '~/.vim/snippets'
 
     Bundle 'ervandew/supertab'
