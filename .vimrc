@@ -158,6 +158,19 @@ imap <F5> <Esc><F5>
        normal! 'yzt`z
     endfunction
 
+" Reselect visual block after indent/outdent  
+    vnoremap < <gv
+    vnoremap > >gv
+
+" Easy split navigation
+    nnoremap <C-h> <C-w>h
+    nnoremap <C-j> <C-w>j
+    nnoremap <C-k> <C-w>k
+    nnoremap <C-l> <C-w>l
+
+" Force Saving Files that Require Root Permission
+    cmap w!! %!sudo tee > /dev/null %
+
 " Auto install bundles first starting time
     if iCanHazVundle == 0
         echo "Installing Bundles, please ignore key map error messages"
