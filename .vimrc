@@ -32,7 +32,7 @@
     set laststatus=2
     set showcmd             " Включение отображения незавершенных команд в статусной строке
     set autoread            " Включение автоматического перечтения файла при изменении
-    set number
+    set nonumber
     "set autochdir           " Автоматически устанавливать текущей, директорию отрытого файла
     "set browsedir=buffer    " Начинать обзор с каталога текущего буфера
     "set confirm             " Включение диалогов с запросами
@@ -46,13 +46,16 @@
     set autoindent    " копирует отступы с текущей строки при добавлении новой
     
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
+    au BufRead,BufNewFile *.jade	setlocal filetype=html
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
+    au BufRead,BufNewFile *.less  	setlocal filetype=less
 
     au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
     au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
     au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
     au FileType markdown   setlocal et sw=4 ts=4 sts=4
-    au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
+    "au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
+    "au FileType less        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType javascript setlocal et sw=2 ts=2 sts=2 textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
     
 
@@ -76,9 +79,9 @@
 " --- Python
     let python_highlight_all = 1
     " перед сохранением вырезаем пробелы на концах
-    au BufWritePre *.py normal m`:%s/\s\+$//e ``
+    "au BufWritePre *.py normal m`:%s/\s\+$//e ``
     " удалем пробелы на концах строк 
-    au BufEnter *.py :call RemoveTrailingSpaces()
+    "au BufEnter *.py :call RemoveTrailingSpaces()
 
     " подсвечиваем строки длиннее 80 символов
     au FileType python highlight OverLength ctermbg=darkblue ctermfg=white
@@ -117,10 +120,15 @@
     Bundle 'vim-scripts/JavaScript-Indent'
 
     " disable jsLint for json
-    au BufRead,BufNewFile *.json 	let g:JSLintHighlightErrorLine = 0
+    " au BufRead,BufNewFile *.json 	let g:JSLintHighlightErrorLine = 0
+
+    " coffee script
+    Bundle 'kchmck/vim-coffee-script'
+
 
 " --- Plugins
-    Bundle 'noah/vim256-color'
+    "Bundle 'noah/vim256-color'
+    Bundle 'vim-scripts/wombat256.vim'
     set t_Co=256
 
     " snipmate
@@ -177,5 +185,21 @@ imap <F5> <Esc><F5>
         echo ""
         :BundleInstall
     endif
+
+" Spell checking
+    setlocal spell spelllang=
+    setlocal nospell
+    function ChangeSpellLang()
+        if &spelllang == ""
+            setlocal spell spelllang=ru,en
+            echo "spelllang: ru,en"
+        else
+            setlocal spell spelllang=
+            setlocal nospell
+            echo "spelllang: off"
+        endif
+    endfunc
+    " map spell on/off for English/Russian
+    map <F9> <Esc>:call ChangeSpellLang()<CR>
 
 color wombat256mod
