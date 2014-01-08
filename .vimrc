@@ -49,6 +49,7 @@
     au BufRead,BufNewFile *.jade	setlocal filetype=html
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
     au BufRead,BufNewFile *.less  	setlocal filetype=less
+    "au BufRead,BufNewFile *.csv  	setlocal filetype=csv
 
     au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
     au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
@@ -57,6 +58,7 @@
     "au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType less        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType javascript setlocal et sw=2 ts=2 sts=2 textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
+    au FileType coffee setlocal et sw=2 ts=2 sts=2 textwidth=79
     
 
 
@@ -79,7 +81,7 @@
 " --- Python
     let python_highlight_all = 1
     " перед сохранением вырезаем пробелы на концах
-    "au BufWritePre *.py normal m`:%s/\s\+$//e ``
+    au BufWritePre *.py normal m`:%s/\s\+$//e ``
     " удалем пробелы на концах строк 
     "au BufEnter *.py :call RemoveTrailingSpaces()
 
@@ -88,14 +90,14 @@
     au FileType python match OverLength /\%80v.\+/
 
     " запуск скриптов
-    au FileType python map <F5> :w\|!python %<cr>
+    au FileType python map <buffer> <F5> :w\|!python %<cr>
 
-    " http://www.vim.org/scripts/script.php?script_id=790 
+    " python syntax highlighting: http://www.vim.org/scripts/script.php?script_id=790 
     Bundle 'vim-scripts/python.vim--Vasiliev'
     " http://www.vim.org/scripts/script.php?script_id=1487
     Bundle 'vim-scripts/django.vim'
     " http://www.vim.org/scripts/script.php?script_id=2441
-    Bundle 'vim-scripts/pyflakes.vim'
+    "Bundle 'vim-scripts/pyflakes.vim'
 
 " --- HTML
     " http://www.vim.org/scripts/script.php?script_id=2075
@@ -113,9 +115,9 @@
     au BufEnter *.js :call RemoveTrailingSpaces()
 
     " запуск скриптов
-    au FileType javascript map <F5> :w\|!node %<cr>
+    au FileType javascript map <buffer> <F5> :w\|!node %<cr>
     
-    Bundle 'hallettj/jslint.vim'
+    " Bundle 'hallettj/jslint.vim'
     " http://www.vim.org/scripts/script.php?script_id=3081
     Bundle 'vim-scripts/JavaScript-Indent'
 
@@ -123,20 +125,27 @@
     " au BufRead,BufNewFile *.json 	let g:JSLintHighlightErrorLine = 0
 
     " coffee script
+    filetype off
     Bundle 'kchmck/vim-coffee-script'
+    filetype on
 
 
 " --- Plugins
+    "Syntax checking, needs:
+    "python: flake8, pyflakes or pylint
+    "js: sudo npm install -g jshint
+    Bundle 'scrooloose/syntastic'
+
     "Bundle 'noah/vim256-color'
     Bundle 'vim-scripts/wombat256.vim'
     set t_Co=256
 
     " snipmate
     " snippets repo: https://github.com/honza/vim-snippets
-    Bundle 'vim-addon-mw-utils'
-    Bundle 'tomtom/tlib_vim'
-    Bundle 'garbas/vim-snipmate'
-    let snippets_dir = '~/.vim/snippets'
+    "Bundle 'vim-addon-mw-utils'
+    "Bundle 'tomtom/tlib_vim'
+    "Bundle 'garbas/vim-snipmate'
+    "let snippets_dir = '~/.vim/snippets'
 
     Bundle 'ervandew/supertab'
 
@@ -145,6 +154,10 @@
 
     " коммандный режим в русской раскладке
     Bundle 'powerman/vim-plugin-ruscmd'
+
+    Bundle 'godlygeek/tabular'
+
+    "Bundle 'chrisbra/csv.vim'
 
 imap <F5> <Esc><F5>
 
