@@ -16,6 +16,7 @@
 
 
 " --- Common
+    set cm=blowfish         " Дефолтный режим шифрования
     set nocompatible
     set nowrap
     set novisualbell
