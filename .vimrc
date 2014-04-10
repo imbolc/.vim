@@ -37,6 +37,9 @@
     "set autochdir           " Автоматически устанавливать текущей, директорию отрытого файла
     "set browsedir=buffer    " Начинать обзор с каталога текущего буфера
     "set confirm             " Включение диалогов с запросами
+    
+    " :tabe %%/ - will expand to the current file directory
+    cabbr %% <C-R>=expand('%:p:h')<CR>
 
 " --- Indent
     set smarttab      " в случае включения этой опции, нажатие Tab в начале строки (если быть точнее, до первого непробельного символа в строке) приведет к добавлению отступа, ширина которого соответствует shiftwidth (независимо от значений в tabstop и softtabstop). Нажатие на Backspace удалит отступ, а не только один символ, что очень полезно при включенной expandtab. Напомню: опция оказывает влияние только на отступы в начале строки, в остальных местах используются значения из tabstop и softtabstop.
@@ -48,7 +51,7 @@
     
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
     au BufRead,BufNewFile *.jade	setlocal filetype=html
-    au BufRead,BufNewFile *.jinja2	setlocal filetype=html
+    au BufRead,BufNewFile *.jinja2	setlocal filetype=htmljinja
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
     au BufRead,BufNewFile *.less  	setlocal filetype=less
     au BufRead,BufNewFile *.go  	setlocal filetype=go
@@ -94,7 +97,7 @@
 
     " запуск скриптов
     au FileType python map <buffer> <F5> :w\|!python3 %<cr>
-    "au FileType python map <buffer> <F5> :w\|!%:p<cr>
+    " au FileType python map <buffer> <F5> :w\|!%:p<cr>
 
     " python syntax highlighting: http://www.vim.org/scripts/script.php?script_id=790 
     Bundle 'vim-scripts/python.vim--Vasiliev'
