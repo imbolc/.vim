@@ -100,7 +100,8 @@
     " au FileType python map <buffer> <F5> :w\|!%:p<cr>
 
     " python syntax highlighting: http://www.vim.org/scripts/script.php?script_id=790 
-    Bundle 'vim-scripts/python.vim--Vasiliev'
+    " Bundle 'vim-scripts/python.vim--Vasiliev'
+    Bundle 'hdima/python-syntax'
     " http://www.vim.org/scripts/script.php?script_id=1487
     Bundle 'vim-scripts/django.vim'
     " http://www.vim.org/scripts/script.php?script_id=2441
@@ -159,6 +160,9 @@
     "python: flake8, pyflakes or pylint
     "js: sudo npm install -g jshint
     Bundle 'scrooloose/syntastic'
+    let g:syntastic_python_checkers=['flake8']
+    let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
+    " let g:syntastic_debug = 1  " then use :mes for show list of messages
 
     "Bundle 'noah/vim256-color'
     Bundle 'vim-scripts/wombat256.vim'
