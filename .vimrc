@@ -57,8 +57,8 @@
     au BufRead,BufNewFile *.go  	setlocal filetype=go
     "au BufRead,BufNewFile *.csv  	setlocal filetype=csv
 
-    au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
-    au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
+    " au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
+    " au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
     au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
     au FileType markdown   setlocal et sw=4 ts=4 sts=4
     "au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
@@ -101,7 +101,8 @@
 
     " python syntax highlighting: http://www.vim.org/scripts/script.php?script_id=790 
     " Bundle 'vim-scripts/python.vim--Vasiliev'
-    Bundle 'hdima/python-syntax'
+    " Bundle 'hdima/python-syntax'
+    Bundle 'mitsuhiko/vim-python-combined'
     " http://www.vim.org/scripts/script.php?script_id=1487
     Bundle 'vim-scripts/django.vim'
     " http://www.vim.org/scripts/script.php?script_id=2441
@@ -162,7 +163,15 @@
     Bundle 'scrooloose/syntastic'
     let g:syntastic_python_checkers=['flake8']
     let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
-    " let g:syntastic_debug = 1  " then use :mes for show list of messages
+
+    " Bundle 'vim-scripts/AutoClose'
+
+    " sudo aptitude install exuberant-ctags
+    " Bundle 'majutsushi/tagbar'
+    " autocmd BufEnter * nested :call tagbar#autoopen(0)
+
+    Bundle 'sjl/gundo.vim.git'
+    nnoremap <F8> :GundoToggle<CR>
 
     "Bundle 'noah/vim256-color'
     Bundle 'vim-scripts/wombat256.vim'
@@ -179,9 +188,6 @@
     Bundle 'scrooloose/nerdcommenter'
     autocmd FileType htmljinja let &l:commentstring='{# %s #}'
     let NERDSpaceDelims=1
-    "augroup SetCMS
-        "autocmd FileType ocaml let &l:commentstring='(*%s*)'
-    "augroup END
 
     Bundle 'scrooloose/nerdtree'
 
