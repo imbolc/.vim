@@ -16,6 +16,7 @@
 
 
 " --- Common
+    let mapleader=","
     set cm=blowfish         " Дефолтный режим шифрования
     set nocompatible
     set nowrap
