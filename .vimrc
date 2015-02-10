@@ -16,28 +16,32 @@
 
 
 " --- Common
-    let mapleader=","
-    set cm=blowfish         " Дефолтный режим шифрования
     set nocompatible
+    let mapleader=","
+    set cm=blowfish         " defautl encryption mode
+
+    set nobackup            " do not create backups
+    set noswapfile
+    set nowritebackup
+
     set nowrap
     set novisualbell
     set t_vb=
     set backspace=indent,eol,start whichwrap+=<,>,[,]
-    set nobackup            " Не создавать резервные копии файлов
-    set noswapfile
+
     syntax on
     set ttyfast
-    set ruler               " Включение отображения позиции курсора (всё время)
-    set history=500         " История команд
-    set undolevels=500      " Максимальное количество изменений, которые могут быть отменены
+    set ruler               " show the cursor position all the time
+    set history=50          " history of commands
+    set undolevels=500      " history of undos
+
     set statusline=%<%f%h%m%r%=(%{&fileencoding},%{&encoding})\ (%b,0x%B)\ %l,%c%V\ %P
     set laststatus=2
-    set showcmd             " Включение отображения незавершенных команд в статусной строке
-    set autoread            " Включение автоматического перечтения файла при изменении
+
+    set showcmd             " display incomplete commands
+    set autoread            " automatically re-read changed files
+    set autowrite           " automatically :write before running commands
     set nonumber
-    "set autochdir           " Автоматически устанавливать текущей, директорию отрытого файла
-    "set browsedir=buffer    " Начинать обзор с каталога текущего буфера
-    "set confirm             " Включение диалогов с запросами
     
     " :tabe %%/ - will expand to the current file directory
     cabbr %% <C-R>=expand('%:p:h')<CR>
@@ -52,8 +56,8 @@
     
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
     au BufRead,BufNewFile *.jade	setlocal filetype=html
-    au BufRead,BufNewFile *.html	setlocal filetype=htmljinja
-    au BufRead,BufNewFile *.jinja2	setlocal filetype=htmljinja
+    " au BufRead,BufNewFile *.html	setlocal filetype=htmljinja
+    " au BufRead,BufNewFile *.jinja2	setlocal filetype=htmljinja
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
     au BufRead,BufNewFile *.less  	setlocal filetype=less
     au BufRead,BufNewFile *.go  	setlocal filetype=go
@@ -101,22 +105,14 @@
     au FileType python map <buffer> <F5> :w\|!python3 %<cr>
     " au FileType python map <buffer> <F5> :w\|!%:p<cr>
 
-    " python syntax highlighting: http://www.vim.org/scripts/script.php?script_id=790 
-    " Bundle 'vim-scripts/python.vim--Vasiliev'
-    " Bundle 'hdima/python-syntax'
     Bundle 'mitsuhiko/vim-python-combined'
-    " http://www.vim.org/scripts/script.php?script_id=1487
     Bundle 'vim-scripts/django.vim'
-    " http://www.vim.org/scripts/script.php?script_id=2441
-    "Bundle 'vim-scripts/pyflakes.vim'
 
 " --- HTML
-    " http://www.vim.org/scripts/script.php?script_id=2075
-    "Bundle 'vim-scripts/indenthtml.vim'
-    "Bundle 'othree/html5.vim'
-    "Bundle 'Glench/Vim-Jinja2-Syntax'
     Bundle 'mitsuhiko/vim-jinja'
-    " Bundle 'imbolc/vim-jinja'
+
+" --- Less
+    Bundle 'groenewege/vim-less'
 
 
 " --- JS
@@ -164,6 +160,7 @@
     "python: flake8, pyflakes or pylint
     "js: sudo npm install -g jshint
     Bundle 'scrooloose/syntastic'
+    let g:syntastic_check_on_open=1
     let g:syntastic_python_checkers=['flake8']
     let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
 
@@ -199,7 +196,9 @@
 
     Bundle 'godlygeek/tabular'
 
-    "Bundle 'chrisbra/csv.vim'
+    " Bundle 'kien/ctrlp.vim'
+    " let g:ctrlp_map = '<c-p>'
+    " let g:ctrlp_cmd = 'CtrlP'
 
 imap <F5> <Esc><F5>
 
@@ -258,8 +257,10 @@ imap <F5> <Esc><F5>
     map <F9> <Esc>:call ChangeSpellLang()<CR>
 
 " Autocompletion
-    Bundle 'Shougo/neocomplete.vim'
-    let g:neocomplete#enable_at_startup = 1
+    " Bundle 'Shougo/neocomplete.vim'
+    " let g:neocomplete#enable_at_startup = 1
+    Bundle 'Shougo/neocomplcache.vim'
+    let g:neocomplcache_enable_at_startup = 1
 
     " <TAB>: completion.
     inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
