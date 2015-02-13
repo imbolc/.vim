@@ -42,6 +42,8 @@
     set autoread            " automatically re-read changed files
     set autowrite           " automatically :write before running commands
     set nonumber
+    set foldmethod=syntax
+    " set foldlevelstart=20   " open all folds when opening a file
     
     " :tabe %%/ - will expand to the current file directory
     cabbr %% <C-R>=expand('%:p:h')<CR>
@@ -108,12 +110,16 @@
     Bundle 'mitsuhiko/vim-python-combined'
     Bundle 'vim-scripts/django.vim'
 
+    Bundle 'tmhedberg/SimpylFold'
+
 " --- HTML
     Bundle 'mitsuhiko/vim-jinja'
 
 " --- Less
     Bundle 'groenewege/vim-less'
 
+" --- JSX
+    Bundle 'mxw/vim-jsx'
 
 " --- JS
     " подсвечиваем строки длиннее 100 символов
@@ -130,15 +136,17 @@
     
     " Bundle 'hallettj/jslint.vim'
     " http://www.vim.org/scripts/script.php?script_id=3081
-    Bundle 'vim-scripts/JavaScript-Indent'
+    " Bundle 'vim-scripts/JavaScript-Indent'
+    Bundle 'pangloss/vim-javascript'
+    " let b:javascript_fold=0
 
     " disable jsLint for json
     " au BufRead,BufNewFile *.json 	let g:JSLintHighlightErrorLine = 0
 
     " coffee script
-    filetype off
-    Bundle 'kchmck/vim-coffee-script'
-    filetype on
+    " filetype off
+    " Bundle 'kchmck/vim-coffee-script'
+    " filetype on
 
 " --- GO
     Bundle 'jnwhiteh/vim-golang'
