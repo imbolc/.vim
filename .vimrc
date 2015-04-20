@@ -39,14 +39,20 @@
     set laststatus=2
 
     set showcmd             " display incomplete commands
-    set autoread            " automatically re-read changed files
+    set autoread            " automatically re-read changed files, works only in GUI
     set autowrite           " automatically :write before running commands
     set nonumber
     set foldmethod=syntax
-    " set foldlevelstart=20   " open all folds when opening a file
+    set foldlevelstart=200  " open all folds when opening a file
     
     " :tabe %%/ - will expand to the current file directory
     cabbr %% <C-R>=expand('%:p:h')<CR>
+
+    " auto-reload vimrc
+    augroup reload_vimrc " {
+        autocmd!
+        autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    augroup END " }
 
 " --- Indent
     set smarttab      " в случае включения этой опции, нажатие Tab в начале строки (если быть точнее, до первого непробельного символа в строке) приведет к добавлению отступа, ширина которого соответствует shiftwidth (независимо от значений в tabstop и softtabstop). Нажатие на Backspace удалит отступ, а не только один символ, что очень полезно при включенной expandtab. Напомню: опция оказывает влияние только на отступы в начале строки, в остальных местах используются значения из tabstop и softtabstop.
@@ -57,7 +63,6 @@
     set autoindent    " копирует отступы с текущей строки при добавлении новой
     
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
-    au BufRead,BufNewFile *.jade	setlocal filetype=html
     " au BufRead,BufNewFile *.html	setlocal filetype=htmljinja
     " au BufRead,BufNewFile *.jinja2	setlocal filetype=htmljinja
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
@@ -113,13 +118,19 @@
     Bundle 'tmhedberg/SimpylFold'
 
 " --- HTML
-    Bundle 'mitsuhiko/vim-jinja'
+    " Bundle 'mitsuhiko/vim-jinja'
+    " Bundle 'Glench/Vim-Jinja2-Syntax'
+    Bundle 'othree/html5.vim'
+
 
 " --- Less
     Bundle 'groenewege/vim-less'
 
 " --- JSX
-    Bundle 'mxw/vim-jsx'
+    " Bundle 'mxw/vim-jsx'
+
+" --- Jade
+    Bundle 'digitaltoad/vim-jade'
 
 " --- JS
     " подсвечиваем строки длиннее 100 символов
@@ -132,7 +143,7 @@
     " au BufEnter *.js :call RemoveTrailingSpaces()
 
     " запуск скриптов
-    au FileType javascript map <buffer> <F5> :w\|!node %<cr>
+    au FileType javascript map <buffer> <F5> :w\|!iojs %<cr>
     
     " Bundle 'hallettj/jslint.vim'
     " http://www.vim.org/scripts/script.php?script_id=3081
@@ -194,7 +205,7 @@
 
     "Bundle 'ervandew/supertab'
     Bundle 'scrooloose/nerdcommenter'
-    autocmd FileType htmljinja let &l:commentstring='{# %s #}'
+    autocmd FileType jinja let &l:commentstring='{# %s #}'
     let NERDSpaceDelims=1
 
     Bundle 'scrooloose/nerdtree'
@@ -204,9 +215,11 @@
 
     Bundle 'godlygeek/tabular'
 
-    " Bundle 'kien/ctrlp.vim'
-    " let g:ctrlp_map = '<c-p>'
-    " let g:ctrlp_cmd = 'CtrlP'
+    Bundle 'kien/ctrlp.vim'
+    let g:ctrlp_map = '<c-p>'
+    let g:ctrlp_cmd = 'CtrlP'
+    
+    Bundle 'editorconfig/editorconfig-vim'
 
 imap <F5> <Esc><F5>
 
@@ -251,7 +264,7 @@ imap <F5> <Esc><F5>
 " Spell checking
     setlocal spell spelllang=
     setlocal nospell
-    function ChangeSpellLang()
+    function! ChangeSpellLang()
         if &spelllang == ""
             setlocal spell spelllang=ru,en
             echo "spelllang: ru,en"
@@ -280,5 +293,45 @@ imap <F5> <Esc><F5>
     autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
+" Bundle 'szw/vim-ctrlspace'
+Bundle 'djoshea/vim-autoread'
+
 
 color wombat256mod
+
+" Compatible with ranger 1.4.2 through 1.6.*
+"
+" Add ranger as a file chooser in vim
+"
+" If you add this code to the .vimrc, ranger can be started using the command
+" ":RangerChooser" or the keybinding "<leader>r".  Once you select one or more
+" files, press enter and ranger will quit again and vim will open the selected
+" files.
+function! RangeChooser()
+    let temp = tempname()
+    " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
+    " with ranger 1.4.2 through 1.5.0 instead.
+    "exec 'silent !ranger --choosefile=' . shellescape(temp)
+    exec 'silent !ranger --choosefiles=' . shellescape(temp)
+    if !filereadable(temp)
+        redraw!
+        " Nothing to read.
+        return
+    endif
+    let names = readfile(temp)
+    if empty(names)
+        redraw!
+        " Nothing to open.
+        return
+    endif
+    " Edit the first item.
+    exec 'tabedit ' . fnameescape(names[0])
+    " exec 'edit ' . fnameescape(names[0])
+    " Add any remaning items to the arg list/buffer list.
+    for name in names[1:]
+        exec 'argadd ' . fnameescape(name)
+    endfor
+    redraw!
+endfunction
+command! -bar RangerChooser call RangeChooser()
+nnoremap <leader>r :<C-U>RangerChooser<CR>
