@@ -63,6 +63,7 @@
     set autoindent    " копирует отступы с текущей строки при добавлении новой
     
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
+    au BufRead,BufNewFile *.tag		setlocal filetype=html
     " au BufRead,BufNewFile *.html	setlocal filetype=htmljinja
     " au BufRead,BufNewFile *.jinja2	setlocal filetype=htmljinja
     au BufRead,BufNewFile *.md  	setlocal filetype=markdown
@@ -119,7 +120,7 @@
 
 " --- HTML
     " Bundle 'mitsuhiko/vim-jinja'
-    " Bundle 'Glench/Vim-Jinja2-Syntax'
+    Bundle 'Glench/Vim-Jinja2-Syntax'
     Bundle 'othree/html5.vim'
 
 
