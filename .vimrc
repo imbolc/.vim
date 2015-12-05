@@ -66,7 +66,8 @@
     au BufRead,BufNewFile *.tag		setlocal filetype=html
     " au BufRead,BufNewFile *.html	setlocal filetype=htmljinja
     " au BufRead,BufNewFile *.jinja2	setlocal filetype=htmljinja
-    au BufRead,BufNewFile *.md  	setlocal filetype=markdown
+    " au BufRead,BufNewFile *.md  	setlocal filetype=markdown
+    au BufNewFile,BufReadPost *.md  setlocal filetype=markdown
     au BufRead,BufNewFile *.less  	setlocal filetype=less
     au BufRead,BufNewFile *.go  	setlocal filetype=go
     "au BufRead,BufNewFile *.csv  	setlocal filetype=csv
@@ -74,7 +75,7 @@
     " au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
     " au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
     au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
-    au FileType markdown   setlocal et sw=4 ts=4 sts=4
+    au FileType markdown   setlocal et sw=4 ts=4 sts=4 textwidth=79
     "au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType less        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType javascript setlocal et sw=2 ts=2 sts=2 textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
@@ -116,7 +117,12 @@
     Bundle 'mitsuhiko/vim-python-combined'
     Bundle 'vim-scripts/django.vim'
 
-    Bundle 'tmhedberg/SimpylFold'
+    " Bundle 'tmhedberg/SimpylFold'
+
+" --- Octave
+    " Bundle 'jvirtanen/vim-octave'
+    " au BufNewFile,BufRead *.m     setf octave
+    " au BufNewFile,BufRead *.m     set syntax=matlab
 
 " --- HTML
     " Bundle 'mitsuhiko/vim-jinja'
@@ -125,7 +131,7 @@
 
 
 " --- Less
-    Bundle 'groenewege/vim-less'
+    " Bundle 'groenewege/vim-less'
 
 " --- JSX
     " Bundle 'mxw/vim-jsx'
@@ -144,7 +150,7 @@
     " au BufEnter *.js :call RemoveTrailingSpaces()
 
     " запуск скриптов
-    au FileType javascript map <buffer> <F5> :w\|!iojs %<cr>
+    au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
     
     " Bundle 'hallettj/jslint.vim'
     " http://www.vim.org/scripts/script.php?script_id=3081
@@ -160,8 +166,11 @@
     " Bundle 'kchmck/vim-coffee-script'
     " filetype on
 
+    " npm install -g js-beautify
+    Plugin 'Chiel92/vim-autoformat'
+
 " --- GO
-    Bundle 'jnwhiteh/vim-golang'
+    " Bundle 'jnwhiteh/vim-golang'
 
     filetype off
     filetype plugin indent off
@@ -209,16 +218,16 @@
     autocmd FileType jinja let &l:commentstring='{# %s #}'
     let NERDSpaceDelims=1
 
-    Bundle 'scrooloose/nerdtree'
+    " Bundle 'scrooloose/nerdtree'
 
     " коммандный режим в русской раскладке
     Bundle 'powerman/vim-plugin-ruscmd'
 
     Bundle 'godlygeek/tabular'
 
-    Bundle 'kien/ctrlp.vim'
-    let g:ctrlp_map = '<c-p>'
-    let g:ctrlp_cmd = 'CtrlP'
+    " Bundle 'kien/ctrlp.vim'
+    " let g:ctrlp_map = '<c-p>'
+    " let g:ctrlp_cmd = 'CtrlP'
     
     Bundle 'editorconfig/editorconfig-vim'
 
@@ -296,7 +305,7 @@ imap <F5> <Esc><F5>
 
 " Bundle 'szw/vim-ctrlspace'
 Bundle 'djoshea/vim-autoread'
-
+Bundle 'tpope/vim-fugitive'
 
 color wombat256mod
 
@@ -313,7 +322,7 @@ function! RangeChooser()
     " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
     " with ranger 1.4.2 through 1.5.0 instead.
     "exec 'silent !ranger --choosefile=' . shellescape(temp)
-    exec 'silent !ranger --choosefiles=' . shellescape(temp)
+    exec 'silent !ranger ' . shellescape(expand('%:p:h')) . ' --choosefiles=' . shellescape(temp)
     if !filereadable(temp)
         redraw!
         " Nothing to read.
