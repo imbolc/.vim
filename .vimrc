@@ -54,6 +54,9 @@
         autocmd BufWritePost $MYVIMRC source $MYVIMRC
     augroup END " }
 
+    "enable mouse support
+    "set mouse=a
+
 " --- Indent
     set smarttab      " в случае включения этой опции, нажатие Tab в начале строки (если быть точнее, до первого непробельного символа в строке) приведет к добавлению отступа, ширина которого соответствует shiftwidth (независимо от значений в tabstop и softtabstop). Нажатие на Backspace удалит отступ, а не только один символ, что очень полезно при включенной expandtab. Напомню: опция оказывает влияние только на отступы в начале строки, в остальных местах используются значения из tabstop и softtabstop.
     set tabstop=4     " количество пробелов, которыми символ табуляции отображается в тексте. Оказывает влияние как на уже существующие табуляции, так и на новые. В случае изменения значения, «на лету» применяется к тексту
@@ -64,18 +67,18 @@
     
     au BufRead,BufNewFile *.ejs		setlocal filetype=html
     au BufRead,BufNewFile *.tag		setlocal filetype=html
-    " au BufRead,BufNewFile *.html	setlocal filetype=htmljinja
-    " au BufRead,BufNewFile *.jinja2	setlocal filetype=htmljinja
-    " au BufRead,BufNewFile *.md  	setlocal filetype=markdown
+    au BufRead,BufNewFile *.html	setlocal filetype=jinja
     au BufNewFile,BufReadPost *.md  setlocal filetype=markdown
     au BufRead,BufNewFile *.less  	setlocal filetype=less
     au BufRead,BufNewFile *.go  	setlocal filetype=go
+    au BufRead,BufNewFile *.rs  	setlocal filetype=rust
     "au BufRead,BufNewFile *.csv  	setlocal filetype=csv
 
     " au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
     " au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
     au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
     au FileType markdown   setlocal et sw=4 ts=4 sts=4 textwidth=79
+    au FileType yaml       setlocal et sw=4 ts=4 sts=4
     "au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType less        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType javascript setlocal et sw=2 ts=2 sts=2 textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
@@ -111,11 +114,11 @@
     au FileType python match OverLength /\%80v.\+/
 
     " запуск скриптов
-    au FileType python map <buffer> <F5> :w\|!python3 %<cr>
+    au FileType python map <buffer> <F5> :w\|!python %<cr>
     " au FileType python map <buffer> <F5> :w\|!%:p<cr>
 
     Bundle 'mitsuhiko/vim-python-combined'
-    Bundle 'vim-scripts/django.vim'
+    " Bundle 'vim-scripts/django.vim'
 
     " Bundle 'tmhedberg/SimpylFold'
 
@@ -127,7 +130,8 @@
 " --- HTML
     " Bundle 'mitsuhiko/vim-jinja'
     Bundle 'Glench/Vim-Jinja2-Syntax'
-    Bundle 'othree/html5.vim'
+    " Bundle 'othree/html5.vim'
+    " Bundle "lepture/vim-jinja"
 
 
 " --- Less
@@ -206,14 +210,6 @@
     Bundle 'vim-scripts/wombat256.vim'
     set t_Co=256
 
-    " snipmate
-    " snippets repo: https://github.com/honza/vim-snippets
-    "Bundle 'vim-addon-mw-utils'
-    "Bundle 'tomtom/tlib_vim'
-    "Bundle 'garbas/vim-snipmate'
-    "let snippets_dir = '~/.vim/snippets'
-
-    "Bundle 'ervandew/supertab'
     Bundle 'scrooloose/nerdcommenter'
     autocmd FileType jinja let &l:commentstring='{# %s #}'
     let NERDSpaceDelims=1
@@ -298,7 +294,7 @@ imap <F5> <Esc><F5>
 
     " Enable omni completion.
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType html,jinja setlocal omnifunc=htmlcomplete#CompleteTags
     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
     autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
@@ -306,6 +302,13 @@ imap <F5> <Esc><F5>
 " Bundle 'szw/vim-ctrlspace'
 Bundle 'djoshea/vim-autoread'
 Bundle 'tpope/vim-fugitive'
+Bundle 'ingydotnet/yaml-vim'
+
+" rust
+Plugin 'rust-lang/rust.vim'
+let g:rustfmt_autosave = 1
+au FileType rust map <buffer> <F5> :w\|RustRun<cr>
+
 
 color wombat256mod
 
