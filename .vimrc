@@ -119,6 +119,7 @@
 
     Bundle 'mitsuhiko/vim-python-combined'
     " Bundle 'vim-scripts/django.vim'
+    " Bundle 'hynek/vim-python-pep8-indent'
 
     " Bundle 'tmhedberg/SimpylFold'
 
@@ -129,16 +130,13 @@
 
 " --- HTML
     " Bundle 'mitsuhiko/vim-jinja'
-    Bundle 'Glench/Vim-Jinja2-Syntax'
+    " Bundle 'Glench/Vim-Jinja2-Syntax'
     " Bundle 'othree/html5.vim'
-    " Bundle "lepture/vim-jinja"
+    Bundle "lepture/vim-jinja"
 
 
 " --- Less
     " Bundle 'groenewege/vim-less'
-
-" --- JSX
-    " Bundle 'mxw/vim-jsx'
 
 " --- Jade
     Bundle 'digitaltoad/vim-jade'
@@ -157,21 +155,19 @@
     au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
     
     " Bundle 'hallettj/jslint.vim'
-    " http://www.vim.org/scripts/script.php?script_id=3081
-    " Bundle 'vim-scripts/JavaScript-Indent'
     Bundle 'pangloss/vim-javascript'
     " let b:javascript_fold=0
 
     " disable jsLint for json
     " au BufRead,BufNewFile *.json 	let g:JSLintHighlightErrorLine = 0
 
-    " coffee script
-    " filetype off
-    " Bundle 'kchmck/vim-coffee-script'
-    " filetype on
-
     " npm install -g js-beautify
     Plugin 'Chiel92/vim-autoformat'
+
+" --- JSX
+    " npm install -g eslint babel-eslint eslint-plugin-react
+    Bundle 'mxw/vim-jsx'
+    let g:jsx_ext_required = 0
 
 " --- GO
     " Bundle 'jnwhiteh/vim-golang'
@@ -196,6 +192,7 @@
     let g:syntastic_check_on_open=1
     let g:syntastic_python_checkers=['flake8']
     let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
+    let g:syntastic_javascript_checkers = ['eslint']
 
     " Bundle 'vim-scripts/AutoClose'
 
@@ -208,6 +205,7 @@
 
     "Bundle 'noah/vim256-color'
     Bundle 'vim-scripts/wombat256.vim'
+    Bundle 'robertmeta/nofrils'
     set t_Co=256
 
     Bundle 'scrooloose/nerdcommenter'
@@ -303,6 +301,7 @@ imap <F5> <Esc><F5>
 Bundle 'djoshea/vim-autoread'
 Bundle 'tpope/vim-fugitive'
 Bundle 'ingydotnet/yaml-vim'
+Bundle 'dyng/ctrlsf.vim'
 
 " rust
 Plugin 'rust-lang/rust.vim'
