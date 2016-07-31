@@ -74,15 +74,14 @@
     au BufRead,BufNewFile *.rs  	setlocal filetype=rust
     "au BufRead,BufNewFile *.csv  	setlocal filetype=csv
 
-    " au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
+    au FileType html       setlocal et sw=2 ts=2 sts=2 textwidth=0    " HTML (tab width 2 chr, no wrapping)
     " au FileType htmldjango setlocal et sw=2 ts=2 sts=2 textwidth=0
     au FileType python     setlocal et sw=4 ts=4 sts=4 " textwidth=79   " Python (tab width 4 chr, wrap at 79th char)
     au FileType markdown   setlocal et sw=4 ts=4 sts=4 textwidth=79
     au FileType yaml       setlocal et sw=4 ts=4 sts=4
     "au FileType css        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
     "au FileType less        setlocal et sw=2 ts=2 sts=2 " textwidth=79   " CSS (tab width 2 chr, wrap at 79th char)
-    "au FileType javascript setlocal et sw=2 ts=2 sts=2 textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
-    au FileType coffee setlocal et sw=2 ts=2 sts=2 textwidth=79
+    au FileType javascript setlocal et sw=2 ts=2 sts=2 textwidth=79   " JavaScript (tab width 2 chr, wrap at 79th)
     
 
 
@@ -133,6 +132,8 @@
     " Bundle 'Glench/Vim-Jinja2-Syntax'
     " Bundle 'othree/html5.vim'
     Bundle "lepture/vim-jinja"
+    " Bundle 'alvan/vim-closetag'
+    " let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.jsx,*.js"
 
 
 " --- Less
