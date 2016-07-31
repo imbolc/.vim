@@ -192,7 +192,7 @@
     Bundle 'scrooloose/syntastic'
     let g:syntastic_check_on_open=1
     let g:syntastic_python_checkers=['flake8']
-    let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
+    " let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
     let g:syntastic_javascript_checkers = ['eslint']
 
     " Bundle 'vim-scripts/AutoClose'
