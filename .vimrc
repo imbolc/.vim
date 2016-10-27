@@ -1,20 +1,3 @@
-" --- Setting up Vundle - the vim plugin bundler
-    filetype off
-    let iCanHazVundle=1
-    let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-    if !filereadable(vundle_readme)
-        echo "Installing Vundle.."
-        echo ""
-        silent !mkdir -p ~/.vim/bundle
-        silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-        let iCanHazVundle=0
-    endif
-    set rtp+=~/.vim/bundle/vundle/
-    call vundle#rc()
-    filetype plugin indent on
-    Bundle 'gmarik/vundle'
-
-
 " --- Common
     set nocompatible
     let mapleader=","
@@ -116,31 +99,33 @@
     au FileType python map <buffer> <F5> :w\|!python %<cr>
     " au FileType python map <buffer> <F5> :w\|!%:p<cr>
 
-    Bundle 'mitsuhiko/vim-python-combined'
-    " Bundle 'vim-scripts/django.vim'
-    " Bundle 'hynek/vim-python-pep8-indent'
+    call plug#begin()
 
-    " Bundle 'tmhedberg/SimpylFold'
+    Plug 'mitsuhiko/vim-python-combined'
+    " Plug 'vim-scripts/django.vim'
+    " Plug 'hynek/vim-python-pep8-indent'
+
+    " Plug 'tmhedberg/SimpylFold'
 
 " --- Octave
-    " Bundle 'jvirtanen/vim-octave'
+    " Plug 'jvirtanen/vim-octave'
     " au BufNewFile,BufRead *.m     setf octave
     " au BufNewFile,BufRead *.m     set syntax=matlab
 
 " --- HTML
-    " Bundle 'mitsuhiko/vim-jinja'
-    " Bundle 'Glench/Vim-Jinja2-Syntax'
-    " Bundle 'othree/html5.vim'
-    Bundle "lepture/vim-jinja"
-    " Bundle 'alvan/vim-closetag'
+    " Plug 'mitsuhiko/vim-jinja'
+    " Plug 'Glench/Vim-Jinja2-Syntax'
+    " Plug 'othree/html5.vim'
+    Plug 'lepture/vim-jinja'
+    " Plug 'alvan/vim-closetag'
     " let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.jsx,*.js"
 
 
 " --- Less
-    " Bundle 'groenewege/vim-less'
+    " Plug 'groenewege/vim-less'
 
 " --- Jade
-    Bundle 'digitaltoad/vim-jade'
+    Plug 'digitaltoad/vim-jade'
 
 " --- JS
     " подсвечиваем строки длиннее 100 символов
@@ -155,23 +140,23 @@
     " запуск скриптов
     au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
     
-    " Bundle 'hallettj/jslint.vim'
-    Bundle 'pangloss/vim-javascript'
+    " Plug 'hallettj/jslint.vim'
+    Plug 'pangloss/vim-javascript'
     " let b:javascript_fold=0
 
     " disable jsLint for json
     " au BufRead,BufNewFile *.json 	let g:JSLintHighlightErrorLine = 0
 
     " npm install -g js-beautify
-    Plugin 'Chiel92/vim-autoformat'
+    Plug 'Chiel92/vim-autoformat'
 
 " --- JSX
     " npm install -g eslint babel-eslint eslint-plugin-react
-    Bundle 'mxw/vim-jsx'
+    Plug 'mxw/vim-jsx'
     let g:jsx_ext_required = 0
 
 " --- GO
-    " Bundle 'jnwhiteh/vim-golang'
+    " Plug 'jnwhiteh/vim-golang'
 
     filetype off
     filetype plugin indent off
@@ -189,42 +174,53 @@
     "Syntax checking, needs:
     "python: flake8, pyflakes or pylint
     "js: sudo npm install -g jshint
-    Bundle 'scrooloose/syntastic'
-    let g:syntastic_check_on_open=1
-    let g:syntastic_python_checkers=['flake8']
-    " let g:syntastic_python_flake8_exe = "python3 -m flake8.run"
-    let g:syntastic_javascript_checkers = ['eslint']
+    " Plug 'scrooloose/syntastic'
+    " let g:syntastic_check_on_open=1
+    " let g:syntastic_python_checkers=['flake8']
+    " let g:syntastic_javascript_checkers = ['eslint']
 
-    " Bundle 'vim-scripts/AutoClose'
+" === Linters
+" python: flake8, pyflakes or pylint
+" js: sudo npm install -g jshint
+Plug 'neomake/neomake'
+autocmd! BufWritePost,BufEnter * Neomake
+let g:neomake_warning_sign = {
+  \ 'text': 'W',
+  \ 'texthl': 'WarningMsg',
+  \ }
+let g:neomake_error_sign = {
+  \ 'text': 'E',
+  \ 'texthl': 'ErrorMsg',
+  \ }
+
+    " Plug 'vim-scripts/AutoClose'
 
     " sudo aptitude install exuberant-ctags
-    " Bundle 'majutsushi/tagbar'
+    " Plug 'majutsushi/tagbar'
     " autocmd BufEnter * nested :call tagbar#autoopen(0)
 
-    Bundle 'sjl/gundo.vim.git'
-    nnoremap <F8> :GundoToggle<CR>
 
-    "Bundle 'noah/vim256-color'
-    Bundle 'vim-scripts/wombat256.vim'
-    Bundle 'robertmeta/nofrils'
+    "Plug 'noah/vim256-color'
+    Plug 'vim-scripts/wombat256.vim'
+    Plug 'robertmeta/nofrils'
     set t_Co=256
 
-    Bundle 'scrooloose/nerdcommenter'
+    Plug 'scrooloose/nerdcommenter'
     autocmd FileType jinja let &l:commentstring='{# %s #}'
     let NERDSpaceDelims=1
 
-    " Bundle 'scrooloose/nerdtree'
+    " Plug 'scrooloose/nerdtree'
 
     " коммандный режим в русской раскладке
-    Bundle 'powerman/vim-plugin-ruscmd'
+    Plug 'powerman/vim-plugin-ruscmd'
 
-    Bundle 'godlygeek/tabular'
+    Plug 'godlygeek/tabular'
 
-    " Bundle 'kien/ctrlp.vim'
+    " Plug 'kien/ctrlp.vim'
     " let g:ctrlp_map = '<c-p>'
     " let g:ctrlp_cmd = 'CtrlP'
     
-    Bundle 'editorconfig/editorconfig-vim'
+    Plug 'editorconfig/editorconfig-vim'
 
 imap <F5> <Esc><F5>
 
@@ -259,13 +255,6 @@ imap <F5> <Esc><F5>
 " Force Saving Files that Require Root Permission
     cmap w!! %!sudo tee > /dev/null %
 
-" Auto install bundles first starting time
-    if iCanHazVundle == 0
-        echo "Installing Bundles, please ignore key map error messages"
-        echo ""
-        :BundleInstall
-    endif
-
 " Spell checking
     setlocal spell spelllang=
     setlocal nospell
@@ -283,9 +272,9 @@ imap <F5> <Esc><F5>
     map <F9> <Esc>:call ChangeSpellLang()<CR>
 
 " Autocompletion
-    " Bundle 'Shougo/neocomplete.vim'
+    " Plug 'Shougo/neocomplete.vim'
     " let g:neocomplete#enable_at_startup = 1
-    Bundle 'Shougo/neocomplcache.vim'
+    Plug 'Shougo/neocomplcache.vim'
     let g:neocomplcache_enable_at_startup = 1
 
     " <TAB>: completion.
@@ -298,18 +287,20 @@ imap <F5> <Esc><F5>
     autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Bundle 'szw/vim-ctrlspace'
-Bundle 'djoshea/vim-autoread'
-Bundle 'tpope/vim-fugitive'
-Bundle 'ingydotnet/yaml-vim'
-Bundle 'dyng/ctrlsf.vim'
+" Plug 'szw/vim-ctrlspace'
+Plug 'djoshea/vim-autoread'
+Plug 'tpope/vim-fugitive'
+Plug 'ingydotnet/yaml-vim'
+Plug 'dyng/ctrlsf.vim'
 
 " rust
-Plugin 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim'
 let g:rustfmt_autosave = 1
 au FileType rust map <buffer> <F5> :w\|RustRun<cr>
 
 
+
+call plug#end()
 color wombat256mod
 
 " Compatible with ranger 1.4.2 through 1.6.*
