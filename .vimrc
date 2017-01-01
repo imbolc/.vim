@@ -91,10 +91,6 @@
     " удалем пробелы на концах строк 
     "au BufEnter *.py :call RemoveTrailingSpaces()
 
-    " подсвечиваем строки длиннее 80 символов
-    au FileType python highlight OverLength ctermbg=darkblue ctermfg=white
-    au FileType python match OverLength /\%80v.\+/
-
     " запуск скриптов
     au FileType python map <buffer> <F5> :w\|!python %<cr>
     " au FileType python map <buffer> <F5> :w\|!%:p<cr>
@@ -208,6 +204,7 @@ let g:neomake_error_sign = {
     Plug 'scrooloose/nerdcommenter'
     autocmd FileType jinja let &l:commentstring='{# %s #}'
     let NERDSpaceDelims=1
+    let g:NERDDefaultAlign = 'left'
 
     " Plug 'scrooloose/nerdtree'
 
@@ -272,8 +269,6 @@ imap <F5> <Esc><F5>
     map <F9> <Esc>:call ChangeSpellLang()<CR>
 
 " Autocompletion
-    " Plug 'Shougo/neocomplete.vim'
-    " let g:neocomplete#enable_at_startup = 1
     Plug 'Shougo/neocomplcache.vim'
     let g:neocomplcache_enable_at_startup = 1
 
@@ -299,43 +294,12 @@ let g:rustfmt_autosave = 1
 au FileType rust map <buffer> <F5> :w\|RustRun<cr>
 
 
+" Ranger
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
+let g:ranger_map_keys = 0
+let g:ranger_open_new_tab = 1
+map <leader>r :Ranger<CR>
 
 call plug#end()
 color wombat256mod
-
-" Compatible with ranger 1.4.2 through 1.6.*
-"
-" Add ranger as a file chooser in vim
-"
-" If you add this code to the .vimrc, ranger can be started using the command
-" ":RangerChooser" or the keybinding "<leader>r".  Once you select one or more
-" files, press enter and ranger will quit again and vim will open the selected
-" files.
-function! RangeChooser()
-    let temp = tempname()
-    " The option "--choosefiles" was added in ranger 1.5.1. Use the next line
-    " with ranger 1.4.2 through 1.5.0 instead.
-    "exec 'silent !ranger --choosefile=' . shellescape(temp)
-    exec 'silent !ranger ' . shellescape(expand('%:p:h')) . ' --choosefiles=' . shellescape(temp)
-    if !filereadable(temp)
-        redraw!
-        " Nothing to read.
-        return
-    endif
-    let names = readfile(temp)
-    if empty(names)
-        redraw!
-        " Nothing to open.
-        return
-    endif
-    " Edit the first item.
-    exec 'tabedit ' . fnameescape(names[0])
-    " exec 'edit ' . fnameescape(names[0])
-    " Add any remaning items to the arg list/buffer list.
-    for name in names[1:]
-        exec 'argadd ' . fnameescape(name)
-    endfor
-    redraw!
-endfunction
-command! -bar RangerChooser call RangeChooser()
-nnoremap <leader>r :<C-U>RangerChooser<CR>
