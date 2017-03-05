@@ -55,13 +55,20 @@ filetype plugin indent on
     set fileformats=unix,dos,mac
 
 call plug#begin()
-Plug 'editorconfig/editorconfig-vim'
+"Plug 'editorconfig/editorconfig-vim'
+Plug 'sgur/vim-editorconfig'
+
+Plug 'othree/html5.vim'
+
+" === C
+au FileType c map <buffer> <F5> :w\|!gcc % -o /tmp/% && /tmp/%<cr>
 
 " === Python
-autocmd FileType python setlocal textwidth=79
-autocmd FileType python setlocal colorcolumn=+1
+autocmd FileType python setlocal colorcolumn=80
 
+let g:python3_host_prog = expand('~/.vim/py3env/bin/python')
 let python_highlight_all = 1
+
 " run python scripts
 au FileType python map <buffer> <F5> :w\|!python %<cr>
 " remove trailing slashes
@@ -79,6 +86,15 @@ Plug 'Chiel92/vim-autoformat'
 " npm install -g eslint babel-eslint eslint-plugin-react
 Plug 'mxw/vim-jsx'
 " let g:jsx_ext_required = 0
+
+" === Markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+Plug 'plasticboy/vim-markdown'
+let g:markdown_fenced_languages = ['python']
+autocmd FileType markdown setlocal colorcolumn=80
+
+" === Vue
+Plug 'posva/vim-vue'
 
 " === Linters
 " python: flake8, pyflakes or pylint
@@ -109,25 +125,42 @@ let g:NERDDefaultAlign = 'left'
 Plug 'powerman/vim-plugin-ruscmd'
 
 " === Autocompletion
-Plug 'Shougo/neocomplcache.vim'
-let g:neocomplcache_enable_at_startup = 1
 
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"" pip3 install neovim
+"" test `:echo has("python3")`
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"let g:deoplete#enable_at_startup = 1
+"" pip3 install jedi
+"Plug 'zchee/deoplete-jedi'
+"
+"" <TAB>: completion.
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+
+" pip3 install neovim jedi mistune psutil setproctitle
+Plug 'roxma/nvim-completion-manager'
+Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <buffer> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,jinja setlocal omnifunc=htmlcomplete#CompleteTags
+"autocmd FileType html,jinja setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Ranger
-Plug 'francoiscabrol/ranger.vim'
-Plug 'rbgrouleff/bclose.vim'
-let g:ranger_map_keys = 0
-let g:ranger_open_new_tab = 1
-map <leader>r :w\|Ranger<CR>
+"Plug 'francoiscabrol/ranger.vim'
+"Plug 'rbgrouleff/bclose.vim'
+"let g:ranger_map_keys = 0
+"let g:ranger_open_new_tab = 1
+"map <leader>r :w\|Ranger<CR>
+
+Plug 'Mizuchi/vim-ranger'
+map <leader>r :w\|:tabe %:p:h<cr>
+
 
 
 call plug#end()

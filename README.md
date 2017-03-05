@@ -10,3 +10,10 @@ Install
     git clone https://github.com/imbolc/.vim
     ln -s ~/.vim/.vimrc ~/
     ln -s ~/.vim ~/.config/nvim
+
+    python3 -m venv py3env
+    source py3env/bin/activate
+    pip install -r requirements.txt
+
+    pip2 install virtualenv
+    virtualenv 

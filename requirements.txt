@@ -1,0 +1,6 @@
+neovim
+jedi
+mistune
+psutil
+setproctitle
+flake8
