@@ -109,6 +109,10 @@ let g:neomake_error_sign = {
   \ 'text': 'E',
   \ 'texthl': 'ErrorMsg',
   \ }
+let g:neomake_python_enabled_makers = ['flake8']
+let g:neomake_python_flake8_maker = {
+  \ 'exe': expand('~/.vim/py3env/bin/flake8')
+  \ }
 
 " === Colors
 Plug 'vim-scripts/wombat256.vim'
@@ -161,6 +165,8 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 Plug 'Mizuchi/vim-ranger'
 map <leader>r :w\|:tabe %:p:h<cr>
 
+"Plug 'xolox/vim-misc'
+"Plug 'xolox/vim-notes'
 
 
 call plug#end()
