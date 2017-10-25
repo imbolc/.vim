@@ -16,10 +16,12 @@ set ttyfast
 set ruler               " show the cursor position all the time
 set history=50          " history of commands
 set undolevels=500      " history of undos
+set title               " change the terminal's title
 
 set statusline=%<%f%h%m%r%=(%{&fileencoding},%{&encoding})\ (%b,0x%B)\ %l,%c%V\ %P
 set laststatus=2
 
+"set cursorline          " Highlight current line 
 set showcmd             " display incomplete commands
 set autoread            " automatically re-read changed files, works only in GUI
 set autowrite           " automatically :write before running commands
@@ -122,8 +124,31 @@ set t_Co=256
 " === Comments
 Plug 'scrooloose/nerdcommenter'
 autocmd FileType jinja let &l:commentstring='{# %s #}'
-" let NERDSpaceDelims=1
+let NERDSpaceDelims = 1
 let g:NERDDefaultAlign = 'left'
+let g:NERDCommentEmptyLines = 1
+let g:NERDAltDelims_python = 1
+
+let g:ft = ''
+fu! NERDCommenter_before()
+    if &ft == 'vue'
+        let g:ft = 'vue'
+        let stack = synstack(line('.'), col('.'))
+        if len(stack) > 0
+            let syn = synIDattr((stack)[0], 'name')
+            if len(syn) > 0
+                let syn = tolower(syn)
+                exe 'setf '.syn
+            endif
+        endif
+    endif
+endfu
+fu! NERDCommenter_after()
+    if g:ft == 'vue'
+        setf vue
+        let g:ft = ''
+    endif
+endfu
 
 " === Russian commands
 Plug 'powerman/vim-plugin-ruscmd'
@@ -134,40 +159,48 @@ Plug 'powerman/vim-plugin-ruscmd'
 "" test `:echo has("python3")`
 "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 "let g:deoplete#enable_at_startup = 1
-"" pip3 install jedi
+""" pip3 install jedi
 "Plug 'zchee/deoplete-jedi'
-"
-"" <TAB>: completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+
 
 " pip3 install neovim jedi mistune psutil setproctitle
+
 Plug 'roxma/nvim-completion-manager'
 Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
+
+Plug 'godlygeek/tabular'
+
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <buffer> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 
 
 " Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-"autocmd FileType html,jinja setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" omnifuncs
+augroup omnifuncs
+  autocmd!
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup end
 
-" Ranger
-"Plug 'francoiscabrol/ranger.vim'
-"Plug 'rbgrouleff/bclose.vim'
-"let g:ranger_map_keys = 0
-"let g:ranger_open_new_tab = 1
-"map <leader>r :w\|Ranger<CR>
 
 Plug 'Mizuchi/vim-ranger'
 map <leader>r :w\|:tabe %:p:h<cr>
 
+map <leader>n :tabe ~/Yandex.Disk/Documents/notes.md<cr>
+
 "Plug 'xolox/vim-misc'
 "Plug 'xolox/vim-notes'
+"
+Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
+let g:rustfmt_autosave = 1
 
+Plug 'timonv/vim-cargo'
+au FileType rust map <buffer> <F5> :CargoRun<cr>
 
 call plug#end()
 
