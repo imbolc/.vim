@@ -86,8 +86,20 @@ Plug 'Chiel92/vim-autoformat'
 
 " === JSX
 " npm install -g eslint babel-eslint eslint-plugin-react
-Plug 'mxw/vim-jsx'
+" Plug 'mxw/vim-jsx'
 " let g:jsx_ext_required = 0
+
+" python: flake8, pyflakes or pylint
+" js: sudo npm install -g eslint babel-eslint
+Plug 'w0rp/ale'
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+let g:ale_python_flake8_executable = expand('~/.vim/py3env/bin/flake8')
+" let g:ale_lint_on_text_changed = 'never'
+map <leader>e <Plug>(ale_next_wrap)<cr>
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " === Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
@@ -101,20 +113,20 @@ Plug 'posva/vim-vue'
 " === Linters
 " python: flake8, pyflakes or pylint
 " js: sudo npm install -g jshint
-Plug 'neomake/neomake'
-autocmd! BufWritePost,BufEnter * Neomake
-let g:neomake_warning_sign = {
-  \ 'text': 'W',
-  \ 'texthl': 'WarningMsg',
-  \ }
-let g:neomake_error_sign = {
-  \ 'text': 'E',
-  \ 'texthl': 'ErrorMsg',
-  \ }
-let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_python_flake8_maker = {
-  \ 'exe': expand('~/.vim/py3env/bin/flake8')
-  \ }
+" Plug 'neomake/neomake'
+" autocmd! BufWritePost,BufEnter * Neomake
+" let g:neomake_warning_sign = {
+"   \ 'text': 'W',
+"   \ 'texthl': 'WarningMsg',
+"   \ }
+" let g:neomake_error_sign = {
+"   \ 'text': 'E',
+"   \ 'texthl': 'ErrorMsg',
+"   \ }
+" let g:neomake_python_enabled_makers = ['flake8']
+" let g:neomake_python_flake8_maker = {
+"   \ 'exe': expand('~/.vim/py3env/bin/flake8')
+"   \ }
 
 " === Colors
 Plug 'vim-scripts/wombat256.vim'
@@ -187,7 +199,7 @@ augroup omnifuncs
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup end
 
-
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'Mizuchi/vim-ranger'
 map <leader>r :w\|:tabe %:p:h<cr>
 
@@ -230,8 +242,8 @@ highlight ColorColumn ctermbg=black guibg=black
 
 " Easy split navigation
     nnoremap <C-h> <C-w>h
-    nnoremap <C-j> <C-w>j
-    nnoremap <C-k> <C-w>k
+    " nnoremap <C-j> <C-w>j
+    " nnoremap <C-k> <C-w>k
     nnoremap <C-l> <C-w>l
 
 " Force Saving Files that Require Root Permission

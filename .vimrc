@@ -103,11 +103,6 @@
 
     " Plug 'tmhedberg/SimpylFold'
 
-" --- Octave
-    " Plug 'jvirtanen/vim-octave'
-    " au BufNewFile,BufRead *.m     setf octave
-    " au BufNewFile,BufRead *.m     set syntax=matlab
-
 " --- HTML
     " Plug 'mitsuhiko/vim-jinja'
     " Plug 'Glench/Vim-Jinja2-Syntax'
@@ -119,9 +114,6 @@
 
 " --- Less
     " Plug 'groenewege/vim-less'
-
-" --- Jade
-    Plug 'digitaltoad/vim-jade'
 
 " --- JS
     " подсвечиваем строки длиннее 100 символов
@@ -146,26 +138,6 @@
     " npm install -g js-beautify
     Plug 'Chiel92/vim-autoformat'
 
-" --- JSX
-    " npm install -g eslint babel-eslint eslint-plugin-react
-    Plug 'mxw/vim-jsx'
-    let g:jsx_ext_required = 0
-
-" --- GO
-    " Plug 'jnwhiteh/vim-golang'
-
-    filetype off
-    filetype plugin indent off
-    set runtimepath+=$GOROOT/misc/vim
-    filetype plugin indent on
-    syntax on
-
-    " autoformat .go files before saving
-    "autocmd FileType go autocmd BufWritePre <buffer> Fmt
-
-    " runing by F5
-    au FileType go map <buffer> <F5> :w\|!go run %<cr>
-
 " --- Plugins
     "Syntax checking, needs:
     "python: flake8, pyflakes or pylint
@@ -175,19 +147,35 @@
     " let g:syntastic_python_checkers=['flake8']
     " let g:syntastic_javascript_checkers = ['eslint']
 
+" --- Vue
+    Plug 'posva/vim-vue'
+
 " === Linters
 " python: flake8, pyflakes or pylint
+" js: sudo npm install -g eslint babel-eslint
+Plug 'w0rp/ale'
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+let g:ale_python_flake8_executable = expand('~/.vim/py3env/bin/flake8')
+" let g:ale_lint_on_text_changed = 'never'
+map <leader>e <Plug>(ale_next_wrap)<cr>
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+
+" python: flake8, pyflakes or pylint
 " js: sudo npm install -g jshint
-Plug 'neomake/neomake'
-autocmd! BufWritePost,BufEnter * Neomake
-let g:neomake_warning_sign = {
-  \ 'text': 'W',
-  \ 'texthl': 'WarningMsg',
-  \ }
-let g:neomake_error_sign = {
-  \ 'text': 'E',
-  \ 'texthl': 'ErrorMsg',
-  \ }
+"Plug 'neomake/neomake'
+"autocmd! BufWritePost,BufEnter * Neomake
+"let g:neomake_warning_sign = {
+"  \ 'text': 'W',
+"  \ 'texthl': 'WarningMsg',
+"  \ }
+"let g:neomake_error_sign = {
+"  \ 'text': 'E',
+"  \ 'texthl': 'ErrorMsg',
+"  \ }
 
     " Plug 'vim-scripts/AutoClose'
 
@@ -245,8 +233,8 @@ imap <F5> <Esc><F5>
 
 " Easy split navigation
     nnoremap <C-h> <C-w>h
-    nnoremap <C-j> <C-w>j
-    nnoremap <C-k> <C-w>k
+    " nnoremap <C-j> <C-w>j
+    " nnoremap <C-k> <C-w>k
     nnoremap <C-l> <C-w>l
 
 " Force Saving Files that Require Root Permission

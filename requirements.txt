@@ -1,3 +1,4 @@
+wheel
 neovim
 jedi
 mistune
