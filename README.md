@@ -8,4 +8,7 @@ Install
     ln -s ~/.vim/.vimrc ~/
     ln -s ~/.vim ~/.config/nvim
 
-    cd ~/.vim; python3 -m venv py3env; ./py3env/bin/pip install -r requirements.txt
+    cd ~/.vim
+    python3 -m venv py3env
+    ./py3env/bin/pip install wheel
+    ./py3env/bin/pip install -r requirements.txt
