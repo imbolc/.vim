@@ -6,6 +6,9 @@ set nobackup            " do not create backups
 set noswapfile
 set nowritebackup
 
+set splitright
+set splitbelow
+
 set nowrap
 set novisualbell
 set t_vb=
@@ -18,7 +21,7 @@ set history=50          " history of commands
 set undolevels=500      " history of undos
 set title               " change the terminal's title
 
-set statusline=%<%f%h%m%r%=(%{&fileencoding},%{&encoding})\ (%b,0x%B)\ %l,%c%V\ %P
+set statusline=%<%f%h%m%r%=%{fugitive#statusline()}\ (%{&fileencoding},%{&encoding})\ (%b,0x%B)\ %l,%c%V\ %P
 set laststatus=2
 
 "set cursorline          " Highlight current line 
@@ -104,7 +107,7 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " === Markdown
 autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 Plug 'plasticboy/vim-markdown'
-let g:markdown_fenced_languages = ['python']
+let g:markdown_fenced_languages = ['python', 'js']
 autocmd FileType markdown setlocal colorcolumn=80
 
 " === Vue
@@ -129,10 +132,15 @@ Plug 'posva/vim-vue'
 "   \ }
 
 " === Colors
-Plug 'vim-scripts/wombat256.vim'
-Plug 'robertmeta/nofrils'
 set t_Co=256
+Plug 'vim-scripts/wombat256.vim'
+" Plug 'robertmeta/nofrils'
+" Plug 'noah/vim256-color'
+Plug 'NLKNguyen/papercolor-theme'
 
+" use f8 / shift+f8 to switch schemes
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-colorscheme-switcher'
 " === Comments
 Plug 'scrooloose/nerdcommenter'
 autocmd FileType jinja let &l:commentstring='{# %s #}'
@@ -214,27 +222,28 @@ let g:rustfmt_autosave = 1
 Plug 'timonv/vim-cargo'
 au FileType rust map <buffer> <F5> :CargoRun<cr>
 
+" Git branch in status line
+Plug 'tpope/vim-fugitive'
+
+" Tables
+" `:TableModeToggle` to enter in table mode
+Plug 'dhruvasagar/vim-table-mode'
+let g:table_mode_corner='|'  " markdown-compatible corners
+
+
+" CSV
+Plug 'mechatroner/rainbow_csv'
 call plug#end()
 
-color wombat256mod
-highlight ColorColumn ctermbg=black guibg=black
+" color wombat256mod
+" highlight ColorColumn ctermbg=black guibg=black
 
-""" Вкл/Выкл вставку as-is: <F4>
-""" в NORMAL: i и <Insert> всегда входят в INSERT с nopaste
-""" в NORMAL: <F4> входит в INSERT с paste
-""" в INSERT: <F4> переключает paste/nopaste
-    nnoremap <F4>       :set paste<CR>i
-    nnoremap i          :set nopaste<CR>i
-    nnoremap <Insert>   :set nopaste<CR><Insert>
-    imap <F4> <C-O>:set paste<CR>
-    set pastetoggle=<xF4>
+" color 256_automation
+highlight ColorColumn ctermbg=white
+set background=light
+colorscheme PaperColor
 
-" Удалить пробелы в конце строк
-    function! RemoveTrailingSpaces()
-       normal! mzHmy
-       execute '%s:\s\+$::ge'
-       normal! 'yzt`z
-    endfunction
+
 
 " Reselect visual block after indent/outdent  
     vnoremap < <gv

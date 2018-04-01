@@ -186,7 +186,8 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
     "Plug 'noah/vim256-color'
     Plug 'vim-scripts/wombat256.vim'
-    Plug 'robertmeta/nofrils'
+    "Plug 'robertmeta/nofrils'
+    Plug 'NLKNguyen/papercolor-theme'
     set t_Co=256
 
     Plug 'scrooloose/nerdcommenter'
@@ -290,4 +291,6 @@ let g:ranger_open_new_tab = 1
 map <leader>r :Ranger<CR>
 
 call plug#end()
+" color wombat256mod
+
 color wombat256mod
