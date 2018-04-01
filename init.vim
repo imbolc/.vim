@@ -98,6 +98,7 @@ Plug 'w0rp/ale'
 let g:ale_linters = {
 \   'javascript': ['eslint'],
 \}
+let g:ale_use_deprecated_neovim = 1
 let g:ale_python_flake8_executable = expand('~/.vim/py3env/bin/flake8')
 " let g:ale_lint_on_text_changed = 'never'
 map <leader>e <Plug>(ale_next_wrap)<cr>
