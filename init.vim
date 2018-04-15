@@ -234,6 +234,10 @@ let g:table_mode_corner='|'  " markdown-compatible corners
 
 " CSV
 Plug 'mechatroner/rainbow_csv'
+
+" Auto paste mode
+Plug 'ConradIrwin/vim-bracketed-paste'
+
 call plug#end()
 
 " color wombat256mod
