@@ -82,6 +82,10 @@ autocmd FileType html,jinja setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 
+" Syntax checking
+" pip insall flake8
+Plug 'vim-syntastic/syntastic'
+
 Plug 'ingydotnet/yaml-vim'
 
 " Ranger
