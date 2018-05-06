@@ -85,8 +85,13 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 " Syntax checking
 " pip insall flake8
 Plug 'vim-syntastic/syntastic'
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 Plug 'ingydotnet/yaml-vim'
+
+" Auto paste mode
+Plug 'ConradIrwin/vim-bracketed-paste'
 
 " Ranger
 Plug 'francoiscabrol/ranger.vim'
