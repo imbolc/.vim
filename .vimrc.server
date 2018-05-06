@@ -1,0 +1,94 @@
+set nocompatible
+let mapleader=","
+
+set nobackup
+set noswapfile
+set nowritebackup
+
+set nowrap
+set novisualbell
+set t_vb=
+set backspace=indent,eol,start whichwrap+=<,>,[,]
+
+syntax on
+set ttyfast
+set ruler
+set history=50
+set undolevels=500
+
+set statusline=%<%f%h%m%r%=(%{&fileencoding},%{&encoding})\ (%b,0x%B)\ %l,%c%V\ %P
+set laststatus=2
+
+set showcmd
+set autowrite
+set nonumber
+    
+set smarttab
+set tabstop=4
+set softtabstop=4
+set expandtab
+set shiftwidth=4
+set autoindent
+
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8,cp1251,koi8-r,cp866,ucs-bom,ascii
+set fileformat=unix
+set fileformats=unix,dos,mac
+
+set ignorecase
+set smartcase
+set incsearch
+set showmatch
+set hlsearch
+set gdefault
+
+set t_Co=256
+
+" Reselect visual block after indent/outdent  
+vnoremap < <gv
+vnoremap > >gv
+
+" Easy split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Execude scripts
+au FileType python map <buffer> <F5> :w\|!python %<cr>
+au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
+imap <F5> <Esc><F5>
+
+" Plugins
+call plug#begin()
+
+let python_highlight_all = 1
+Plug 'mitsuhiko/vim-python-combined'
+
+Plug 'scrooloose/nerdcommenter'
+let NERDSpaceDelims=1
+let g:NERDDefaultAlign = 'left'
+
+Plug 'powerman/vim-plugin-ruscmd'
+Plug 'editorconfig/editorconfig-vim'
+
+" Autocompletion
+Plug 'Shougo/neocomplcache.vim'
+let g:neocomplcache_enable_at_startup = 1
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,jinja setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+
+Plug 'ingydotnet/yaml-vim'
+
+" Ranger
+Plug 'francoiscabrol/ranger.vim'
+Plug 'rbgrouleff/bclose.vim'
+let g:ranger_map_keys = 0
+let g:ranger_open_new_tab = 1
+map <leader>r :Ranger<CR>
+
+call plug#end()
