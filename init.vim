@@ -36,6 +36,10 @@ set completeopt=menu    " do not show help window for std python library
 imap <F5> <Esc><F5>
 filetype plugin indent on
 
+" show trailing whitespace chars
+set list
+set listchars=tab:>-,trail:.,extends:#,nbsp:.
+
 " === Indent
     set smarttab
     set tabstop=4
@@ -63,6 +67,8 @@ call plug#begin()
 "Plug 'editorconfig/editorconfig-vim'
 Plug 'sgur/vim-editorconfig'
 
+" === html
+autocmd BufNewFile,BufReadPost *.svelte setlocal filetype=html  textwidth=80
 Plug 'othree/html5.vim'
 
 " === C
@@ -106,10 +112,11 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " === Markdown
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+" reformat: gq
+autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown  textwidth=80
 Plug 'plasticboy/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'js']
-autocmd FileType markdown setlocal colorcolumn=80
+" autocmd FileType markdown setlocal colorcolumn=80
 
 " === Vue
 Plug 'posva/vim-vue'
@@ -143,6 +150,7 @@ Plug 'NLKNguyen/papercolor-theme'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
 " === Comments
+Plug 'tomtom/tcomment_vim'
 Plug 'scrooloose/nerdcommenter'
 autocmd FileType jinja let &l:commentstring='{# %s #}'
 let NERDSpaceDelims = 1
@@ -217,11 +225,11 @@ map <leader>n :tabe ~/Yandex.Disk/Documents/notes.md<cr>
 "Plug 'xolox/vim-misc'
 "Plug 'xolox/vim-notes'
 "
-Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
-let g:rustfmt_autosave = 1
+" Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
+" let g:rustfmt_autosave = 1
 
-Plug 'timonv/vim-cargo'
-au FileType rust map <buffer> <F5> :CargoRun<cr>
+" Plug 'timonv/vim-cargo'
+" au FileType rust map <buffer> <F5> :CargoRun<cr>
 
 " Git branch in status line
 Plug 'tpope/vim-fugitive'
@@ -231,12 +239,34 @@ Plug 'tpope/vim-fugitive'
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner='|'  " markdown-compatible corners
 
-
 " CSV
 Plug 'mechatroner/rainbow_csv'
 
 " Auto paste mode
 Plug 'ConradIrwin/vim-bracketed-paste'
+
+" Nim
+Plug 'zah/nim.vim'
+
+fun! JumpToDef()
+  if exists("*GotoDefinition_" . &filetype)
+    call GotoDefinition_{&filetype}()
+  else
+    exe "norm! \<C-]>"
+  endif
+endf
+
+" Jump to tag
+nn <M-g> :call JumpToDef()<cr>
+ino <M-g> <esc>:call JumpToDef()<cr>i
+
+" Tmux splits integration
+Plug 'christoomey/vim-tmux-navigator'
+
+" Golang
+Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+au FileType go map <buffer> <F5> :w\|!go run %<cr>
 
 call plug#end()
 
@@ -248,17 +278,12 @@ highlight ColorColumn ctermbg=white
 set background=light
 colorscheme PaperColor
 
-
-
 " Reselect visual block after indent/outdent  
     vnoremap < <gv
     vnoremap > >gv
 
-" Easy split navigation
-    nnoremap <C-h> <C-w>h
-    " nnoremap <C-j> <C-w>j
-    " nnoremap <C-k> <C-w>k
-    nnoremap <C-l> <C-w>l
+" Go to next error
+    nnoremap ge :lnext<cr>
 
 " Force Saving Files that Require Root Permission
     cmap w!! %!sudo tee > /dev/null %

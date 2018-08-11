@@ -2,3 +2,5 @@
 /plugged
 /py3env
 /autoload/plug.vim.old
+/autoload
+/ftplugin
