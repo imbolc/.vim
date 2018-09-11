@@ -63,6 +63,14 @@ set listchars=tab:>-,trail:.,extends:#,nbsp:.
     set fileformat=unix
     set fileformats=unix,dos,mac
 
+" === Templates
+    if has("autocmd")
+      augroup templates
+        autocmd BufNewFile *.sh 0r ~/.vim/templates/skeleton.sh
+        autocmd BufNewFile *.vue 0r ~/.vim/templates/skeleton.vue
+      augroup END
+    endif
+
 call plug#begin()
 "Plug 'editorconfig/editorconfig-vim'
 Plug 'sgur/vim-editorconfig'
@@ -104,10 +112,10 @@ Plug 'w0rp/ale'
 let g:ale_linters = {
 \   'javascript': ['eslint'],
 \}
-let g:ale_use_deprecated_neovim = 1
+"let g:ale_use_deprecated_neovim = 1
 let g:ale_python_flake8_executable = expand('~/.vim/py3env/bin/flake8')
 " let g:ale_lint_on_text_changed = 'never'
-map <leader>e <Plug>(ale_next_wrap)<cr>
+map <leader>e <Plug>(ale_next_wrap)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
@@ -120,6 +128,21 @@ let g:markdown_fenced_languages = ['python', 'js']
 
 " === Vue
 Plug 'posva/vim-vue'
+
+" === Prettier
+"Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+Plug 'prettier/vim-prettier', {
+    \ 'do': 'yarn install',
+    \ 'for': [
+        \ 'javascript',
+        \ 'json',
+        \ 'css',
+        \ 'markdown',
+        \ 'vue',
+        \ 'graphql'
+    \ ] }
+let g:prettier#config#semi = 'false'
+let g:prettier#config#single_quote = 'true'
 
 " === Linters
 " python: flake8, pyflakes or pylint
@@ -265,7 +288,7 @@ Plug 'christoomey/vim-tmux-navigator'
 
 " Golang
 Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
 au FileType go map <buffer> <F5> :w\|!go run %<cr>
 
 call plug#end()
@@ -276,7 +299,12 @@ call plug#end()
 " color 256_automation
 highlight ColorColumn ctermbg=white
 set background=light
-colorscheme PaperColor
+try
+    colorscheme PaperColor
+catch /^Vim\%((\a\+)\)\=:E185/
+    " pass
+endtry
+
 
 " Reselect visual block after indent/outdent  
     vnoremap < <gv
