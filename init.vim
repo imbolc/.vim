@@ -248,11 +248,14 @@ map <leader>n :tabe ~/Yandex.Disk/Documents/notes.md<cr>
 "Plug 'xolox/vim-misc'
 "Plug 'xolox/vim-notes'
 "
-" Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
-" let g:rustfmt_autosave = 1
 
-" Plug 'timonv/vim-cargo'
-" au FileType rust map <buffer> <F5> :CargoRun<cr>
+Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
+let g:rustfmt_autosave = 1
+au FileType rust map <buffer> <F5> :w\|!rustc % -o /tmp/% && /tmp/% && rm /tmp/%<cr>
+
+Plug 'timonv/vim-cargo'
+autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
+au FileType cargo map <buffer> <F5> :CargoRun<cr>
 
 " Git branch in status line
 Plug 'tpope/vim-fugitive'
