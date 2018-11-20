@@ -71,6 +71,9 @@ set listchars=tab:>-,trail:.,extends:#,nbsp:.
       augroup END
     endif
 
+" === Fix neovim + konsole
+set guicursor=
+
 call plug#begin()
 "Plug 'editorconfig/editorconfig-vim'
 Plug 'sgur/vim-editorconfig'
@@ -290,9 +293,9 @@ ino <M-g> <esc>:call JumpToDef()<cr>i
 Plug 'christoomey/vim-tmux-navigator'
 
 " Golang
-Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
-Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
-au FileType go map <buffer> <F5> :w\|!go run %<cr>
+" Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
+" Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
+" au FileType go map <buffer> <F5> :w\|!go run %<cr>
 
 call plug#end()
 
