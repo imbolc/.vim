@@ -94,9 +94,12 @@ let python_highlight_all = 1
 " run python scripts
 au FileType python map <buffer> <F5> :w\|!python %<cr>
 " remove trailing slashes
-au BufWritePre *.py normal m`:%s/\s\+$//e ``
+" au BufWritePre *.py normal m`:%s/\s\+$//e ``
 Plug 'mitsuhiko/vim-python-combined'
 Plug 'lepture/vim-jinja'
+
+Plug 'ambv/black'
+" autocmd BufWritePre *.py execute ':Black'
 
 " === JavaScript
 au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
@@ -177,33 +180,33 @@ Plug 'xolox/vim-misc'
 Plug 'xolox/vim-colorscheme-switcher'
 " === Comments
 Plug 'tomtom/tcomment_vim'
-Plug 'scrooloose/nerdcommenter'
-autocmd FileType jinja let &l:commentstring='{# %s #}'
-let NERDSpaceDelims = 1
-let g:NERDDefaultAlign = 'left'
-let g:NERDCommentEmptyLines = 1
-let g:NERDAltDelims_python = 1
-
-let g:ft = ''
-fu! NERDCommenter_before()
-    if &ft == 'vue'
-        let g:ft = 'vue'
-        let stack = synstack(line('.'), col('.'))
-        if len(stack) > 0
-            let syn = synIDattr((stack)[0], 'name')
-            if len(syn) > 0
-                let syn = tolower(syn)
-                exe 'setf '.syn
-            endif
-        endif
-    endif
-endfu
-fu! NERDCommenter_after()
-    if g:ft == 'vue'
-        setf vue
-        let g:ft = ''
-    endif
-endfu
+" Plug 'scrooloose/nerdcommenter'
+" autocmd FileType jinja let &l:commentstring='{# %s #}'
+" let NERDSpaceDelims = 1
+" let g:NERDDefaultAlign = 'left'
+" let g:NERDCommentEmptyLines = 1
+" let g:NERDAltDelims_python = 1
+"
+" let g:ft = ''
+" fu! NERDCommenter_before()
+"     if &ft == 'vue'
+"         let g:ft = 'vue'
+"         let stack = synstack(line('.'), col('.'))
+"         if len(stack) > 0
+"             let syn = synIDattr((stack)[0], 'name')
+"             if len(syn) > 0
+"                 let syn = tolower(syn)
+"                 exe 'setf '.syn
+"             endif
+"         endif
+"     endif
+" endfu
+" fu! NERDCommenter_after()
+"     if g:ft == 'vue'
+"         setf vue
+"         let g:ft = ''
+"     endif
+" endfu
 
 " === Russian commands
 Plug 'powerman/vim-plugin-ruscmd'
@@ -252,9 +255,11 @@ map <leader>n :tabe ~/Yandex.Disk/Documents/notes.md<cr>
 "Plug 'xolox/vim-notes'
 "
 
+Plug 'cespare/vim-toml'
+
 Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
 let g:rustfmt_autosave = 1
-au FileType rust map <buffer> <F5> :w\|!rustc % -o /tmp/% && /tmp/% && rm /tmp/%<cr>
+au FileType rust map <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
 
 Plug 'timonv/vim-cargo'
 autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
@@ -296,6 +301,10 @@ Plug 'christoomey/vim-tmux-navigator'
 " Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
 " Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
 " au FileType go map <buffer> <F5> :w\|!go run %<cr>
+
+Plug 'elmcast/elm-vim'
+
+Plug 'tpope/vim-dadbod'
 
 call plug#end()
 
