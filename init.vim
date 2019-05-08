@@ -224,8 +224,21 @@ Plug 'powerman/vim-plugin-ruscmd'
 
 " pip3 install neovim jedi mistune psutil setproctitle
 
-Plug 'roxma/nvim-completion-manager'
-Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
+"Plug 'roxma/nvim-completion-manager'
+"Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
+
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+" IMPORTANT: :help Ncm2PopupOpen for more information
+set completeopt=noinsert,menuone,noselect
+
+" NOTE: you need to install completion sources to get completions. Check
+" our wiki page for a list of sources: https://github.com/ncm2/ncm2/wiki
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
 
 Plug 'godlygeek/tabular'
 
@@ -262,7 +275,7 @@ let g:rustfmt_autosave = 1
 au FileType rust map <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
 
 Plug 'timonv/vim-cargo'
-autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
+" autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
 au FileType cargo map <buffer> <F5> :CargoRun<cr>
 
 " Git branch in status line
