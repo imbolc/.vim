@@ -4,3 +4,4 @@ mistune
 psutil
 setproctitle
 flake8
+mypy

@@ -68,6 +68,7 @@ set listchars=tab:>-,trail:.,extends:#,nbsp:.
       augroup templates
         autocmd BufNewFile *.sh 0r ~/.vim/templates/skeleton.sh
         autocmd BufNewFile *.vue 0r ~/.vim/templates/skeleton.vue
+        autocmd BufNewFile *.svelte 0r ~/.vim/templates/skeleton.svelte
       augroup END
     endif
 
@@ -79,8 +80,11 @@ call plug#begin()
 Plug 'sgur/vim-editorconfig'
 
 " === html
-autocmd BufNewFile,BufReadPost *.svelte setlocal filetype=html  textwidth=80
-Plug 'othree/html5.vim'
+" autocmd BufNewFile,BufReadPost *.svelte setlocal filetype=html
+" Plug 'othree/html5.vim'
+
+" === svelte
+Plug 'evanleck/vim-svelte'
 
 " === C
 au FileType c map <buffer> <F5> :w\|!gcc % -o /tmp/% && /tmp/%<cr>
@@ -170,56 +174,39 @@ let g:prettier#config#single_quote = 'true'
 
 " === Colors
 set t_Co=256
-Plug 'vim-scripts/wombat256.vim'
-" Plug 'robertmeta/nofrils'
-" Plug 'noah/vim256-color'
-Plug 'NLKNguyen/papercolor-theme'
+set background=light
+highlight ColorColumn ctermbg=white
 
 " use f8 / shift+f8 to switch schemes
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-colorscheme-switcher'
-" === Comments
-Plug 'tomtom/tcomment_vim'
-" Plug 'scrooloose/nerdcommenter'
-" autocmd FileType jinja let &l:commentstring='{# %s #}'
-" let NERDSpaceDelims = 1
-" let g:NERDDefaultAlign = 'left'
-" let g:NERDCommentEmptyLines = 1
-" let g:NERDAltDelims_python = 1
-"
-" let g:ft = ''
-" fu! NERDCommenter_before()
-"     if &ft == 'vue'
-"         let g:ft = 'vue'
-"         let stack = synstack(line('.'), col('.'))
-"         if len(stack) > 0
-"             let syn = synIDattr((stack)[0], 'name')
-"             if len(syn) > 0
-"                 let syn = tolower(syn)
-"                 exe 'setf '.syn
-"             endif
-"         endif
-"     endif
-" endfu
-" fu! NERDCommenter_after()
-"     if g:ft == 'vue'
-"         setf vue
-"         let g:ft = ''
-"     endif
-" endfu
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-colorscheme-switcher'
 
-" === Russian commands
-Plug 'powerman/vim-plugin-ruscmd'
+Plug 'vim-scripts/wombat256.vim'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'junegunn/seoul256.vim'
+try
+    colorscheme 'seoul256-light'
+catch /^Vim\%((\a\+)\)\=:E185/
+    " pass
+endtry
+
+
+Plug 'junegunn/vim-slash'  " automatically remove search selection
+Plug 'tomtom/tcomment_vim' " comments `gc` for block and `gcc` for a single line
+Plug 'powerman/vim-plugin-ruscmd'  " russian symbols in commands
+
+Plug 'junegunn/fzf', { 'do': './install --all' }
+map <leader>f :call fzf#run({'sink': 'tabedit'})<cr>
 
 " === Autocompletion
 
-"" pip3 install neovim
-"" test `:echo has("python3")`
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"let g:deoplete#enable_at_startup = 1
-""" pip3 install jedi
-"Plug 'zchee/deoplete-jedi'
-"Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
+" pip3 install neovim mypy
+" test `:echo has("python3")`
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+"" pip3 install jedi
+Plug 'zchee/deoplete-jedi'
+Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 
 
 " pip3 install neovim jedi mistune psutil setproctitle
@@ -227,18 +214,20 @@ Plug 'powerman/vim-plugin-ruscmd'
 "Plug 'roxma/nvim-completion-manager'
 "Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
 
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-" enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
 
-" IMPORTANT: :help Ncm2PopupOpen for more information
-set completeopt=noinsert,menuone,noselect
-
-" NOTE: you need to install completion sources to get completions. Check
-" our wiki page for a list of sources: https://github.com/ncm2/ncm2/wiki
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
+" Plug 'ncm2/ncm2'
+" Plug 'roxma/nvim-yarp'
+" " enable ncm2 for all buffers
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+"
+" " IMPORTANT: :help Ncm2PopupOpen for more information
+" set completeopt=noinsert,menuone,noselect
+"
+" " NOTE: you need to install completion sources to get completions. Check
+" " our wiki page for a list of sources: https://github.com/ncm2/ncm2/wiki
+" Plug 'ncm2/ncm2-bufword'
+" Plug 'ncm2/ncm2-path'
+" Plug 'ncm2/ncm2-racer'
 
 Plug 'godlygeek/tabular'
 
@@ -262,7 +251,7 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'Mizuchi/vim-ranger'
 map <leader>r :w\|:tabe %:p:h<cr>
 
-map <leader>n :tabe ~/Yandex.Disk/Documents/notes.md<cr>
+" map <leader>n :tabe ~/Yandex.Disk/Documents/notes.md<cr>
 
 "Plug 'xolox/vim-misc'
 "Plug 'xolox/vim-notes'
@@ -315,24 +304,23 @@ Plug 'christoomey/vim-tmux-navigator'
 " Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
 " au FileType go map <buffer> <F5> :w\|!go run %<cr>
 
-Plug 'elmcast/elm-vim'
-
 Plug 'tpope/vim-dadbod'
+
+Plug 'fmoralesc/vim-pad'
+let g:pad#dir = '~/Yandex.Disk/Documents/vimpad' 
+let g:pad#position = { "list" : "right", "pads": "right" }
+let g:pad#window_width = 60
+let g:pad#default_file_extension = ".md"
+let g:pad#set_mappings = 0
+map <leader>n <esc>:Pad ls<cr><s-f>
 
 call plug#end()
 
-" color wombat256mod
-" highlight ColorColumn ctermbg=black guibg=black
-
-" color 256_automation
-highlight ColorColumn ctermbg=white
-set background=light
 try
-    colorscheme PaperColor
+    colorscheme 'seoul256-light'
 catch /^Vim\%((\a\+)\)\=:E185/
     " pass
 endtry
-
 
 " Reselect visual block after indent/outdent  
     vnoremap < <gv
