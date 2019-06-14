@@ -102,8 +102,6 @@ au FileType python map <buffer> <F5> :w\|!python %<cr>
 Plug 'mitsuhiko/vim-python-combined'
 Plug 'lepture/vim-jinja'
 
-Plug 'ambv/black'
-" autocmd BufWritePre *.py execute ':Black'
 
 " === JavaScript
 au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
@@ -117,14 +115,22 @@ Plug 'Chiel92/vim-autoformat'
 " let g:jsx_ext_required = 0
 
 " python: flake8, pyflakes or pylint
-" js: sudo npm install -g eslint babel-eslint
+" prettier works through eslint: https://github.com/prettier/eslint-plugin-prettier
 Plug 'w0rp/ale'
 let g:ale_linters = {
+\   'html': ['eslint'],
 \   'javascript': ['eslint'],
+\   'python': ['flake8'],
+\   'svelte': ['eslint'],
 \}
-"let g:ale_use_deprecated_neovim = 1
-let g:ale_python_flake8_executable = expand('~/.vim/py3env/bin/flake8')
-" let g:ale_lint_on_text_changed = 'never'
+let g:ale_fixers = {
+\   'html': ['eslint'],
+\   'javascript': ['eslint'],
+\   'python': ['black'],
+\   'svelte': ['eslint'],
+\}
+let g:ale_fix_on_save = 1
+let g:ale_virtualenv_dir_names = ['var/env', '.env', '.venv', 'env', 'venv']
 map <leader>e <Plug>(ale_next_wrap)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
