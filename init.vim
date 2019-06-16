@@ -75,7 +75,10 @@ set listchars=tab:>-,trail:.,extends:#,nbsp:.
 " === Fix neovim + konsole
 set guicursor=
 
+command! -nargs=1 ChangeExt execute "saveas ".expand("%:p:r").<q-args>
+
 call plug#begin()
+
 "Plug 'editorconfig/editorconfig-vim'
 Plug 'sgur/vim-editorconfig'
 
@@ -115,7 +118,6 @@ Plug 'Chiel92/vim-autoformat'
 " let g:jsx_ext_required = 0
 
 " python: flake8, pyflakes or pylint
-" prettier works through eslint: https://github.com/prettier/eslint-plugin-prettier
 Plug 'w0rp/ale'
 let g:ale_linters = {
 \   'html': ['eslint'],
@@ -198,7 +200,13 @@ endtry
 
 
 Plug 'junegunn/vim-slash'  " automatically remove search selection
+
 Plug 'tomtom/tcomment_vim' " comments `gc` for block and `gcc` for a single line
+if !exists('g:tcomment#filetype#map')
+    let g:tcomment#filetype#map = {}
+endif
+let g:tcomment#filetype#map['svelte'] = 'html'
+
 Plug 'powerman/vim-plugin-ruscmd'  " russian symbols in commands
 
 Plug 'junegunn/fzf', { 'do': './install --all' }
