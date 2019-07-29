@@ -143,6 +143,8 @@ autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown  textwidth=80
 Plug 'plasticboy/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'js']
 " autocmd FileType markdown setlocal colorcolumn=80
+" au FileType markdown map <buffer> <F5> :w\|!grip -b %<cr>
+au FileType markdown map <buffer> <F5> :w\|!python -m markdown % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
 
 " === Vue
 Plug 'posva/vim-vue'
@@ -210,15 +212,20 @@ let g:tcomment#filetype#map['svelte'] = 'html'
 Plug 'powerman/vim-plugin-ruscmd'  " russian symbols in commands
 
 Plug 'junegunn/fzf', { 'do': './install --all' }
+map <leader>f :call fzf#run({'sink': 'tabedit'})<cr>
+
+" === notes
+let notes_path = '~/Yandex.Disk/Documents/notes/'
+" sudo apt install riprgep
 Plug 'junegunn/fzf.vim'
 let g:fzf_action = {'return': 'vsplit'}
-map <leader>f :call fzf#run({'sink': 'tabedit'})<cr>
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --no-heading --line-number --column --smart-case --color=always '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview({'dir': '~/Yandex.Disk/Documents/vimpad/'}, 'right:50%'),
+  \   fzf#vim#with_preview({'dir': notes_path}, 'right:50%'),
   \   <bang>0)
 map <leader>n :Rg<cr>
+map <leader>c :execute 'tabe' notes_path<cr>
 
 " === Autocompletion
 
