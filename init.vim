@@ -210,7 +210,15 @@ let g:tcomment#filetype#map['svelte'] = 'html'
 Plug 'powerman/vim-plugin-ruscmd'  " russian symbols in commands
 
 Plug 'junegunn/fzf', { 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+let g:fzf_action = {'return': 'vsplit'}
 map <leader>f :call fzf#run({'sink': 'tabedit'})<cr>
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --no-heading --line-number --column --smart-case --color=always '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview({'dir': '~/Yandex.Disk/Documents/vimpad/'}, 'right:50%'),
+  \   <bang>0)
+map <leader>n :Rg<cr>
 
 " === Autocompletion
 
@@ -289,6 +297,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'dhruvasagar/vim-table-mode'
 let g:table_mode_corner='|'  " markdown-compatible corners
 
+Plug 'ollykel/v-vim'
+au FileType vlang map <buffer> <F5> :w\|!v run %<cr>
+
 " CSV
 Plug 'mechatroner/rainbow_csv'
 
@@ -319,14 +330,6 @@ Plug 'christoomey/vim-tmux-navigator'
 " au FileType go map <buffer> <F5> :w\|!go run %<cr>
 
 Plug 'tpope/vim-dadbod'
-
-Plug 'fmoralesc/vim-pad'
-let g:pad#dir = '~/Yandex.Disk/Documents/vimpad' 
-let g:pad#position = { "list" : "right", "pads": "right" }
-let g:pad#window_width = 60
-let g:pad#default_file_extension = ".md"
-let g:pad#set_mappings = 0
-map <leader>n <esc>:Pad ls<cr><s-f>
 
 call plug#end()
 
