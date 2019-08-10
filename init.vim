@@ -215,7 +215,7 @@ Plug 'junegunn/fzf', { 'do': './install --all' }
 map <leader>f :call fzf#run({'sink': 'tabedit'})<cr>
 
 " === notes
-let notes_path = '~/Yandex.Disk/Documents/notes/'
+let notes_path = '~/Documents/scroll/'
 " sudo apt install riprgep
 Plug 'junegunn/fzf.vim'
 let g:fzf_action = {'return': 'vsplit'}
