@@ -39,6 +39,7 @@ filetype plugin indent on
 " show trailing whitespace chars
 set list
 set listchars=tab:>-,trail:.,extends:#,nbsp:.
+highlight SpecialKey ctermfg=grey guifg=grey70
 
 " === Indent
     set smarttab
@@ -143,8 +144,8 @@ autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown  textwidth=80
 Plug 'plasticboy/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'js']
 " autocmd FileType markdown setlocal colorcolumn=80
-" au FileType markdown map <buffer> <F5> :w\|!grip -b %<cr>
-au FileType markdown map <buffer> <F5> :w\|!python -m markdown % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
+" npm install marked
+au FileType markdown map <buffer> <F5> :w\|!marked % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
 
 " === Vue
 Plug 'posva/vim-vue'
@@ -194,11 +195,6 @@ highlight ColorColumn ctermbg=white
 Plug 'vim-scripts/wombat256.vim'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'junegunn/seoul256.vim'
-try
-    colorscheme 'seoul256-light'
-catch /^Vim\%((\a\+)\)\=:E185/
-    " pass
-endtry
 
 
 Plug 'junegunn/vim-slash'  " automatically remove search selection
@@ -219,6 +215,7 @@ let notes_path = '~/Documents/scroll/'
 " sudo apt install riprgep
 Plug 'junegunn/fzf.vim'
 let g:fzf_action = {'return': 'vsplit'}
+let $FZF_DEFAULT_COMMAND = 'ag -g ""' " honor .gitignore
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --no-heading --line-number --column --smart-case --color=always '.shellescape(<q-args>), 1,
@@ -340,11 +337,11 @@ Plug 'tpope/vim-dadbod'
 
 call plug#end()
 
-try
-    colorscheme 'seoul256-light'
-catch /^Vim\%((\a\+)\)\=:E185/
-    " pass
-endtry
+" try
+"     colorscheme PaperColor
+" catch /^Vim\%((\a\+)\)\=:E185/
+"     " pass
+" endtry
 
 " Reselect visual block after indent/outdent  
     vnoremap < <gv
