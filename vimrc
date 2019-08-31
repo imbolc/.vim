@@ -29,7 +29,7 @@ set autowrite           " automatically :write before running commands
 set nonumber
 set foldmethod=syntax
 set foldlevelstart=200  " open all folds when opening a file
-    
+
 " indent
 set smarttab
 set tabstop=4

@@ -129,11 +129,12 @@ let g:ale_linters = {
 let g:ale_fixers = {
 \   'html': ['eslint'],
 \   'javascript': ['eslint'],
-\   'python': ['black'],
 \   'svelte': ['eslint'],
 \}
+" \   'python': ['black'],
 let g:ale_fix_on_save = 1
 let g:ale_virtualenv_dir_names = ['var/env', '.env', '.venv', 'env', 'venv']
+" let g:ale_python_black_options='--skip-string-normalization --line-length 80'
 map <leader>e <Plug>(ale_next_wrap)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
@@ -329,9 +330,9 @@ ino <M-g> <esc>:call JumpToDef()<cr>i
 Plug 'christoomey/vim-tmux-navigator'
 
 " Golang
-" Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
-" Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
-" au FileType go map <buffer> <F5> :w\|!go run %<cr>
+Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
+Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
+au FileType go map <buffer> <F5> :w\|!go run %<cr>
 
 Plug 'tpope/vim-dadbod'
 
