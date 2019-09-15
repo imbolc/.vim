@@ -113,6 +113,11 @@ Plug 'pangloss/vim-javascript'
 " npm install -g js-beautify
 Plug 'Chiel92/vim-autoformat'
 
+" === SQL
+au FileType sql map <buffer> <F5> :w\|!psql -f %<cr>
+Plug 'lifepillar/pgsql.vim'
+let g:sql_type_default = 'pgsql'
+
 " === JSX
 " npm install -g eslint babel-eslint eslint-plugin-react
 " Plug 'mxw/vim-jsx'
@@ -130,8 +135,8 @@ let g:ale_fixers = {
 \   'html': ['eslint'],
 \   'javascript': ['eslint'],
 \   'svelte': ['eslint'],
+\   'python': ['black'],
 \}
-" \   'python': ['black'],
 let g:ale_fix_on_save = 1
 let g:ale_virtualenv_dir_names = ['var/env', '.env', '.venv', 'env', 'venv']
 " let g:ale_python_black_options='--skip-string-normalization --line-length 80'
