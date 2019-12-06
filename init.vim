@@ -96,7 +96,7 @@ Plug 'lepture/vim-jinja'
 
 " === JavaScript
 au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
-" Plug 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript'
 
 " === SQL
 au FileType sql map <buffer> <F5> :w\|!psql -f %<cr>
@@ -118,7 +118,7 @@ let g:ale_fixers = {
 \}
 let g:ale_fix_on_save = 1
 let g:ale_virtualenv_dir_names = ['var/env', '.env', '.venv', 'env', 'venv']
-let g:ale_python_black_options='--line-length 80'
+let g:ale_python_black_options = '--line-length 79'
 map <leader>e <Plug>(ale_next_wrap)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
