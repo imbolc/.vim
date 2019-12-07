@@ -92,6 +92,7 @@ au FileType c map <buffer> <F5> :w\|!gcc % -o /tmp/% && /tmp/%<cr>
 let g:python3_host_prog = expand('~/.vim/py3env/bin/python')
 let python_highlight_all = 1
 au FileType python map <buffer> <F5> :w\|!python %<cr>
+Plug 'mitsuhiko/vim-python-combined'
 Plug 'lepture/vim-jinja'
 
 " === JavaScript
