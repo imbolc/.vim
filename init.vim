@@ -21,8 +21,9 @@ set history=50          " history of commands
 set undolevels=500      " history of undos
 set title               " change the terminal's title
 
-set statusline=%<%f%h%m%r%=%{fugitive#statusline()}\ (%{&fileencoding},%{&encoding})\ (%b,0x%B)\ %l,%c%V\ %P
-set laststatus=2
+set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
+set laststatus=1
+set rulerformat=%=%l,%c\ %P
 
 "set cursorline          " Highlight current line 
 set showcmd             " display incomplete commands
@@ -35,6 +36,15 @@ set mouse=
 set completeopt=menu    " do not show help window for std python library
 imap <F5> <Esc><F5>
 filetype plugin indent on
+
+" suggestions with built-in fuzzy search eg :vs **/*<foo><Tab>
+set wildmenu
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,
+set wildignore+=*.pdf,*.psd
+set wildignore+=**node_modules/*
+set wildignore+=**/migrations/*     " django migrations
+set wildignore+=**/site-packages/*  " python libs in virtualenv
+set wildignore+=**/__pycache__/*
 
 " show trailing whitespace chars
 set list
@@ -220,17 +230,14 @@ map <leader>r :w\|:tabe %:p:h<cr>
 
 Plug 'cespare/vim-toml'
 
-" " === Rust
-" Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
-" let g:rustfmt_autosave = 1
-" au FileType rust map <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
-"
-" Plug 'timonv/vim-cargo'
-" " autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
-" au FileType cargo map <buffer> <F5> :CargoRun<cr>
+" === Rust
+Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
+let g:rustfmt_autosave = 1
+au FileType rust map <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
 
-" Git branch in status line
-Plug 'tpope/vim-fugitive'
+Plug 'timonv/vim-cargo'
+" autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
+au FileType cargo map <buffer> <F5> :CargoRun<cr>
 
 " Tables
 " `:TableModeToggle` to enter in table mode
@@ -247,8 +254,9 @@ Plug 'mechatroner/rainbow_csv'
 " Auto paste mode
 Plug 'ConradIrwin/vim-bracketed-paste'
 
-" " Nim
-" Plug 'zah/nim.vim'
+" Nim
+Plug 'zah/nim.vim'
+au FileType nim map <buffer> <F5> :w\|!nim c -r -d:ssl %<cr>
 
 " Tmux splits integration
 Plug 'christoomey/vim-tmux-navigator'
