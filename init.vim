@@ -104,6 +104,7 @@ let python_highlight_all = 1
 au FileType python map <buffer> <F5> :w\|!python %<cr>
 Plug 'mitsuhiko/vim-python-combined'
 Plug 'lepture/vim-jinja'
+Plug 'raimon49/requirements.txt.vim'
 
 " === JavaScript
 au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
@@ -118,7 +119,7 @@ Plug 'w0rp/ale'
 let g:ale_linters = {
 \   'html': ['eslint'],
 \   'javascript': ['eslint'],
-\   'python': ['flake8'],
+\   'python': ['flake8', 'mypy'],
 \   'svelte': ['eslint'],
 \}
 let g:ale_fixers = {
