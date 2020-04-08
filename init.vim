@@ -36,6 +36,7 @@ set mouse=
 set completeopt=menu    " do not show help window for std python library
 imap <F5> <Esc><F5>
 filetype plugin indent on
+set spelllang=ru,en
 
 " suggestions with built-in fuzzy search eg :vs **/*<foo><Tab>
 set wildmenu
@@ -137,10 +138,11 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " === Markdown
 " reformat: gq
-autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown  textwidth=80
+" autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown  textwidth=80
 Plug 'plasticboy/vim-markdown'
 let g:markdown_fenced_languages = ['python', 'js']
 " autocmd FileType markdown setlocal colorcolumn=80
+au FileType markdown setlocal spell
 au FileType markdown map <buffer> <F5> :w\|!marked % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
 
 " === Vue
@@ -241,9 +243,20 @@ Plug 'timonv/vim-cargo'
 au FileType cargo map <buffer> <F5> :CargoRun<cr>
 
 " Tables
-" `:TableModeToggle` to enter in table mode
+" `:TableModeToggle` to enter table mode
 Plug 'dhruvasagar/vim-table-mode'
-let g:table_mode_corner='|'  " markdown-compatible corners
+" let g:table_mode_corner='|'  " markdown-compatible corners
+
+" Use `||` in insert mode to enter table mode
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+endfunction
+inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
 
 " " Vlang
 " Plug 'ollykel/v-vim'
@@ -286,16 +299,13 @@ call plug#end()
     cmap w!! %!sudo tee > /dev/null %
 
 " Spell checking
-    setlocal spell spelllang=
-    setlocal nospell
     function! ChangeSpellLang()
         if &spelllang == ""
-            setlocal spell spelllang=ru,en
-            echo "spelllang: ru,en"
+            setlocal spell
+            echo "spellcheck is on"
         else
-            setlocal spell spelllang=
             setlocal nospell
-            echo "spelllang: off"
+            echo "spellcheck is off"
         endif
     endfunc
     " map spell on/off for English/Russian
