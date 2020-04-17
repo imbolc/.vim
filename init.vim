@@ -298,15 +298,15 @@ call plug#end()
 " Force Saving Files that Require Root Permission
     cmap w!! %!sudo tee > /dev/null %
 
-" Spell checking
-    function! ChangeSpellLang()
-        if &spelllang == ""
-            setlocal spell
-            echo "spellcheck is on"
+
+" Toggle spell-checking
+    function! ToggleSpellCheck()
+        set spell!
+        if &spell
+            echo "Spellcheck ON"
         else
-            setlocal nospell
-            echo "spellcheck is off"
+            echo "Spellcheck OFF"
         endif
-    endfunc
-    " map spell on/off for English/Russian
-    map <F9> <Esc>:call ChangeSpellLang()<CR>
+    endfunction
+
+    map <F9> <Esc>:call ToggleSpellCheck()<CR>
