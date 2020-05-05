@@ -23,7 +23,11 @@ set title               " change the terminal's title
 
 set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
 set laststatus=1
+" set rulerformat=%60(%=%f\ %P%)
 set rulerformat=%=%l,%c\ %P
+
+" Automatically show current file name in the command line
+autocmd BufEnter * echo @% =~ '^\/.*$' ? @% : './' . @%
 
 "set cursorline          " Highlight current line 
 set showcmd             " display incomplete commands
@@ -38,7 +42,7 @@ imap <F5> <Esc><F5>
 filetype plugin indent on
 set spelllang=ru,en
 
-" suggestions with built-in fuzzy search eg :vs **/*<foo><Tab>
+" Suggestions with built-in fuzzy search eg :vs **/*<foo><Tab>
 set wildmenu
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,
 set wildignore+=*.pdf,*.psd
@@ -47,12 +51,12 @@ set wildignore+=**/migrations/*     " django migrations
 set wildignore+=**/site-packages/*  " python libs in virtualenv
 set wildignore+=**/__pycache__/*
 
-" show trailing whitespace chars
+" Show trailing whitespace chars
 set list
 set listchars=tab:>-,trail:.,extends:#,nbsp:.
 highlight SpecialKey ctermfg=grey guifg=grey70
 
-" === Indent
+" Indentation
 set smarttab
 set tabstop=4
 set softtabstop=4
@@ -60,7 +64,7 @@ set expandtab
 set shiftwidth=4
 set autoindent
 
-" === Search
+" Search
 set ignorecase
 set smartcase
 set incsearch
@@ -68,14 +72,22 @@ set showmatch
 set hlsearch
 set gdefault
 
-" === Encoding
+" Encoding
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8,cp1251,koi8-r,cp866,ucs-bom,ascii
 set fileformat=unix
 set fileformats=unix,dos,mac
 
-" === Templates
+" Switching between tabs by <Tab> / <Shift-Tab>
+nnoremap <tab> gt
+nnoremap <s-tab> gT
+
+" Moving up and down through softly wrapped text
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" Templates
 if has("autocmd")
   augroup templates
     autocmd BufNewFile *.sh 0r ~/.vim/templates/skeleton.sh
@@ -84,22 +96,22 @@ if has("autocmd")
   augroup END
 endif
 
-" === Fix neovim + konsole
+" Fix for neovim + konsole
 set guicursor=
 
-command! -nargs=1 ChangeExt execute "saveas ".expand("%:p:r").<q-args>
+" command! -nargs=1 ChangeExt execute "saveas ".expand("%:p:r").<q-args>
 
 call plug#begin()
 
 Plug 'sgur/vim-editorconfig'
 
-" === svelte
+" Svelte
 Plug 'evanleck/vim-svelte'
 
-" === C
+" Clang
 au FileType c map <buffer> <F5> :w\|!gcc % -o /tmp/% && /tmp/%<cr>
 
-" === Python
+" Python
 let g:python3_host_prog = expand('~/.vim/py3env/bin/python')
 let python_highlight_all = 1
 au FileType python map <buffer> <F5> :w\|!python %<cr>
@@ -107,11 +119,11 @@ Plug 'mitsuhiko/vim-python-combined'
 Plug 'lepture/vim-jinja'
 Plug 'raimon49/requirements.txt.vim'
 
-" === JavaScript
+" JavaScript
 au FileType javascript map <buffer> <F5> :w\|!node --harmony %<cr>
 Plug 'pangloss/vim-javascript'
 
-" === SQL
+" SQL
 au FileType sql map <buffer> <F5> :w\|!psql -f %<cr>
 Plug 'lifepillar/pgsql.vim'
 let g:sql_type_default = 'pgsql'
@@ -138,14 +150,14 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " === Markdown
 " reformat: gq
-" autocmd BufNewFile,BufReadPost *.md setlocal filetype=markdown  textwidth=80
 Plug 'plasticboy/vim-markdown'
-let g:markdown_fenced_languages = ['python', 'js']
+let g:vim_markdown_frontmatter = 1
 " autocmd FileType markdown setlocal colorcolumn=80
+au FileType markdown  setlocal wrap
 au FileType markdown setlocal spell
 au FileType markdown map <buffer> <F5> :w\|!marked % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
 
-" === Vue
+" Vue
 Plug 'posva/vim-vue'
 
 " " " === Prettier
@@ -163,7 +175,7 @@ Plug 'posva/vim-vue'
 " let g:prettier#config#single_quote = 'true'
 
 
-" === Colors
+" Colors
 set t_Co=256
 set background=light
 highlight ColorColumn ctermbg=white
@@ -203,7 +215,7 @@ command! -bang -nargs=* Rg
 map <leader>n :Rg<cr>
 map <leader>c :execute 'tabe' notes_path<cr>
 
-" === Autocompletion
+" Autocompletion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
 Plug 'zchee/deoplete-jedi'
@@ -212,7 +224,6 @@ Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <buffer> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-
 
 " " Enable omni completion.
 " " omnifuncs
@@ -279,6 +290,9 @@ Plug 'christoomey/vim-tmux-navigator'
 " Plug 'nsf/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
 " Plug 'fatih/vim-go' ", { 'do': ':GoUpdateBinaries' }
 " au FileType go map <buffer> <F5> :w\|!go run %<cr>
+
+" Bash
+au FileType sh map <buffer> <F5> :w\|!bash %<cr>
 
 call plug#end()
 
