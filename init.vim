@@ -23,11 +23,9 @@ set title               " change the terminal's title
 
 set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
 set laststatus=1
-" set rulerformat=%60(%=%f\ %P%)
+" set rulerformat=%30(%=%f\ %P%)
 set rulerformat=%=%l,%c\ %P
-
-" Automatically show current file name in the command line
-autocmd BufEnter * echo @% =~ '^\/.*$' ? @% : './' . @%
+autocmd BufEnter * redraw! | echo @% =~ '^\/.*$' ? @% : './' . @%
 
 "set cursorline          " Highlight current line 
 set showcmd             " display incomplete commands
@@ -148,14 +146,17 @@ map <leader>e <Plug>(ale_next_wrap)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
-" === Markdown
+" Markdown
 " reformat: gq
 Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_frontmatter = 1
-" autocmd FileType markdown setlocal colorcolumn=80
 au FileType markdown  setlocal wrap
 au FileType markdown setlocal spell
 au FileType markdown map <buffer> <F5> :w\|!marked % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
+
+" Yaml
+au FileType yaml setlocal wrap
+au FileType yaml setlocal spell
 
 " Vue
 Plug 'posva/vim-vue'
