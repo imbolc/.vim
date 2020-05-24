@@ -16,16 +16,28 @@ set backspace=indent,eol,start whichwrap+=<,>,[,]
 
 syntax on
 set ttyfast
-set ruler               " show the cursor position all the time
 set history=50          " history of commands
 set undolevels=500      " history of undos
 set title               " change the terminal's title
 
-set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
-set laststatus=1
+" set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
 " set rulerformat=%30(%=%f\ %P%)
-set rulerformat=%=%l,%c\ %P
-autocmd BufEnter * redraw! | echo @% =~ '^\/.*$' ? @% : './' . @%
+" set rulerformat=%{winwidth(0)}(%=%f\ %P%)
+" autocmd BufEnter * redraw! | echo @% =~ '^\/' ? @% : './' . @%
+
+" Show command line only with filename in it
+set laststatus=1
+set rulerformat=%15(%=%l,%c\ %P%)
+function _get_commandline_filename()
+    let filename = @% =~ '^\/' ? @% : './' . @%
+    " window width - pressed keys place - ruller, so it fits into a line
+    let max = winwidth(0) - 11 - 16
+    if len(filename) > max
+        let filename = "<" . strcharpart(filename, len(filename) - max + 1)
+    endif
+    return filename
+endfunction
+autocmd BufEnter * redraw! | echo _get_commandline_filename()
 
 "set cursorline          " Highlight current line 
 set showcmd             " display incomplete commands
@@ -76,6 +88,9 @@ set fileencoding=utf-8
 set fileencodings=utf-8,cp1251,koi8-r,cp866,ucs-bom,ascii
 set fileformat=unix
 set fileformats=unix,dos,mac
+
+" Select pasted text
+nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " Switching between tabs by <Tab> / <Shift-Tab>
 nnoremap <tab> gt
@@ -248,11 +263,29 @@ Plug 'cespare/vim-toml'
 " === Rust
 Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
 let g:rustfmt_autosave = 1
-au FileType rust map <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
+au FileType rust nnoremap <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'python': ['pyls'],
+    \ }
+" apply key mappings to all filetypes supported by LanguageClient
+function LC_maps()
+    if has_key(g:LanguageClient_serverCommands, &filetype)
+        nnoremap <silent> gd :call LanguageClient#textDocument_definition({'gotoCmd': 'tabnew'})<CR>
+        nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR><C-W><C-W>
+    endif
+endfunction
+autocmd FileType * call LC_maps()
+" autocmd CursorMoved * if &previewwindow != 1 | pclose | endif
 
 Plug 'timonv/vim-cargo'
 " autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
-au FileType cargo map <buffer> <F5> :CargoRun<cr>
+au FileType cargo nnoremap <buffer> <F5> :CargoRun<cr>
 
 " Tables
 " `:TableModeToggle` to enter table mode
