@@ -19,6 +19,7 @@ set ttyfast
 set history=50          " history of commands
 set undolevels=500      " history of undos
 set title               " change the terminal's title
+set titleold=           " restore the title back on exit
 
 " set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
 " set rulerformat=%30(%=%f\ %P%)
@@ -51,6 +52,7 @@ set completeopt=menu    " do not show help window for std python library
 imap <F5> <Esc><F5>
 filetype plugin indent on
 set spelllang=ru,en
+set relativenumber
 
 " Suggestions with built-in fuzzy search eg :vs **/*<foo><Tab>
 set wildmenu
@@ -99,6 +101,9 @@ nnoremap <s-tab> gT
 " Moving up and down through softly wrapped text
 nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" Switch to normal mode in terminal by escape
+tnoremap <Esc> <C-\><C-n>
 
 " Templates
 if has("autocmd")
@@ -163,11 +168,14 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Markdown
 " reformat: gq
-Plug 'plasticboy/vim-markdown'
-let g:vim_markdown_frontmatter = 1
-au FileType markdown  setlocal wrap
+au FileType markdown setlocal wrap
 au FileType markdown setlocal spell
+au FileType markdown setlocal conceallevel=2
+au FileType markdown vnoremap g gq
 au FileType markdown map <buffer> <F5> :w\|!marked % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
+
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+let g:vim_markdown_frontmatter = 1
 
 " Yaml
 au FileType yaml setlocal wrap
@@ -197,12 +205,13 @@ set background=light
 highlight ColorColumn ctermbg=white
 
 " use f8 / shift+f8 to switch schemes
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-colorscheme-switcher'
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-colorscheme-switcher'
 
-Plug 'vim-scripts/wombat256.vim'
+" Plug 'vim-scripts/wombat256.vim'
 Plug 'NLKNguyen/papercolor-theme'
-Plug 'junegunn/seoul256.vim'
+" Plug 'scheakur/vim-scheakur'
+" Plug 'rakr/vim-one'
 
 
 Plug 'junegunn/vim-slash'  " automatically remove search selection
@@ -261,6 +270,7 @@ map <leader>r :w\|:tabe %:p:h<cr>
 Plug 'cespare/vim-toml'
 
 " === Rust
+au Filetype rust set colorcolumn=100
 Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
 let g:rustfmt_autosave = 1
 au FileType rust nnoremap <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
@@ -328,13 +338,16 @@ Plug 'christoomey/vim-tmux-navigator'
 " Bash
 au FileType sh map <buffer> <F5> :w\|!bash %<cr>
 
+" Sparql
+Plug 'rvesse/vim-sparql'
+
 call plug#end()
 
-" try
-"     colorscheme PaperColor
-" catch /^Vim\%((\a\+)\)\=:E185/
-"     " pass
-" endtry
+try
+    colorscheme PaperColor
+catch /^Vim\%((\a\+)\)\=:E185/
+    " pass
+endtry
 
 " Reselect visual block after indent/outdent  
     vnoremap < <gv
@@ -358,3 +371,38 @@ call plug#end()
     endfunction
 
     map <F9> <Esc>:call ToggleSpellCheck()<CR>
+
+" setl signcolumn=no
+
+" hi mkdCode ctermbg=lightgreen
+hi markdownCodeBlockBG ctermbg=230
+sign define codeblock linehl=markdownCodeBlockBG
+
+function! MarkdownBlocks()
+    let l:continue = 0
+    execute "sign unplace * file=".expand("%")
+
+    " iterate through each line in the buffer
+    for l:lnum in range(1, len(getline(1, "$")))
+        " detect the start fo a code block
+        if getline(l:lnum) =~ "^```.*$" || l:continue
+            " continue placing signs, until the block stops
+            let l:continue = 1
+            " place sign
+            execute "sign place ".l:lnum." line=".l:lnum." name=codeblock file=".expand("%")
+            " stop placing signs
+            if getline(l:lnum) =~ "^```$"
+                let l:continue = 0
+            endif
+        endif
+    endfor
+endfunction
+
+" Use signs to highlight code blocks
+" Set signs on loading the file, leaving insert mode, and after writing it
+au InsertLeave *.md call MarkdownBlocks()
+au BufEnter *.md call MarkdownBlocks()
+au BufWritePost *.md call MarkdownBlocks()
+
+" Leave paste mode when leaving insert mode
+autocmd InsertLeave * set nopaste
