@@ -121,7 +121,7 @@ set guicursor=
 
 call plug#begin()
 
-Plug 'sgur/vim-editorconfig'
+Plug 'editorconfig/editorconfig-vim'
 
 " Svelte
 Plug 'evanleck/vim-svelte'
