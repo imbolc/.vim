@@ -1,4 +1,5 @@
 " === Common
+" set mmp=200000  # diff of huge files
 set nocompatible
 let mapleader=","
 
@@ -14,12 +15,14 @@ set novisualbell
 set t_vb=
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 
-syntax on
+syntax enable
 set ttyfast
 set history=50          " history of commands
 set undolevels=500      " history of undos
 set title               " change the terminal's title
 set titleold=           " restore the title back on exit
+
+nnoremap Q <nop> " disable ex-mode
 
 " set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
 " set rulerformat=%30(%=%f\ %P%)
@@ -44,15 +47,22 @@ autocmd BufEnter * redraw! | echo _get_commandline_filename()
 set showcmd             " display incomplete commands
 set autoread            " automatically re-read changed files, works only in GUI
 set autowrite           " automatically :write before running commands
-set nonumber
 set foldmethod=syntax
 set foldlevelstart=200  " open all folds when opening a file
 set mouse=
-set completeopt=menu    " do not show help window for std python library
 imap <F5> <Esc><F5>
 filetype plugin indent on
 set spelllang=ru,en
 set relativenumber
+set shortmess+=c  " Avoid showing extra messages when using completion
+set signcolumn=no " Don't show an additional column signaling about errors on the left side
+
+" Set completeopt to have a better completion experience
+" :help completeopt
+" menuone: popup even when there's only one match
+" noinsert: Do not insert text until a selection is made
+" noselect: Do not select, force user to select one from the menu
+set completeopt=menuone,noinsert,noselect
 
 " Suggestions with built-in fuzzy search eg :vs **/*<foo><Tab>
 set wildmenu
@@ -114,17 +124,29 @@ if has("autocmd")
   augroup END
 endif
 
-" Fix for neovim + konsole
-set guicursor=
 
 " command! -nargs=1 ChangeExt execute "saveas ".expand("%:p:r").<q-args>
 
 call plug#begin()
 
+" === Language Server Protocol
+" Collection of common configurations for the Nvim LSP client
+Plug 'neovim/nvim-lspconfig'
+
+" Extensions to built-in LSP, for example, providing type inlay hints
+Plug 'tjdevries/lsp_extensions.nvim'
+
+" Autocompletion framework for built-in LSP
+Plug 'nvim-lua/completion-nvim'
+
+
 Plug 'editorconfig/editorconfig-vim'
 
 " Svelte
 Plug 'evanleck/vim-svelte'
+
+" " Auto brackets
+" Plug 'jiangmiao/auto-pairs'
 
 " Clang
 au FileType c map <buffer> <F5> :w\|!gcc % -o /tmp/% && /tmp/%<cr>
@@ -145,6 +167,12 @@ Plug 'pangloss/vim-javascript'
 au FileType sql map <buffer> <F5> :w\|!psql -f %<cr>
 Plug 'lifepillar/pgsql.vim'
 let g:sql_type_default = 'pgsql'
+
+
+" :CocInstall coc-rust-analyzer
+" :CocInstall coc-python
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 
 Plug 'w0rp/ale'
 let g:ale_linters = {
@@ -169,10 +197,13 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 " Markdown
 " reformat: gq
 au FileType markdown setlocal wrap
+" au FileType markdown setlocal textwidth=79
 au FileType markdown setlocal spell
 au FileType markdown setlocal conceallevel=2
 au FileType markdown vnoremap g gq
 au FileType markdown map <buffer> <F5> :w\|!marked % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
+" automatically reformat paragraph on leaving insert mode
+" au InsertLeave *.md normal gwap<CR>
 
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 let g:vim_markdown_frontmatter = 1
@@ -210,8 +241,10 @@ highlight ColorColumn ctermbg=white
 
 " Plug 'vim-scripts/wombat256.vim'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'clinstid/eink.vim'
 " Plug 'scheakur/vim-scheakur'
 " Plug 'rakr/vim-one'
+
 
 
 Plug 'junegunn/vim-slash'  " automatically remove search selection
@@ -231,7 +264,8 @@ map <leader>f :call fzf#run({'sink': 'tabedit'})<cr>
 let notes_path = '~/Documents/scroll/'
 Plug 'junegunn/fzf.vim'
 let g:fzf_action = {'return': 'vsplit'}
-let $FZF_DEFAULT_COMMAND = 'ag -g ""' " honor .gitignore
+" let $FZF_DEFAULT_COMMAND = 'ag -g ""' " honor .gitignore
+let $FZF_DEFAULT_COMMAND = 'rg --files --follow --hidden -g "!{package-lock.json,Cargo.lock}"'
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --no-heading --line-number --column --smart-case --color=always '.shellescape(<q-args>), 1,
@@ -241,14 +275,18 @@ map <leader>n :Rg<cr>
 map <leader>c :execute 'tabe' notes_path<cr>
 
 " Autocompletion
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-Plug 'zchee/deoplete-jedi'
-Plug 'carlitux/deoplete-ternjs', { 'for': ['javascript', 'javascript.jsx'] }
 
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" Trigger completion with <tab>
+" found in :help completion
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <buffer> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
+" use <Tab> as trigger keys
+imap <Tab> <Plug>(completion_smart_tab)
+imap <S-Tab> <Plug>(completion_smart_s_tab)
+
 
 " " Enable omni completion.
 " " omnifuncs
@@ -273,31 +311,35 @@ Plug 'cespare/vim-toml'
 au Filetype rust set colorcolumn=100
 Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
 let g:rustfmt_autosave = 1
-au FileType rust nnoremap <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
+let g:rust_fold = 1
+" au FileType rust nnoremap <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
 
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'python': ['pyls'],
-    \ }
-" apply key mappings to all filetypes supported by LanguageClient
-function LC_maps()
-    if has_key(g:LanguageClient_serverCommands, &filetype)
-        nnoremap <silent> gd :call LanguageClient#textDocument_definition({'gotoCmd': 'tabnew'})<CR>
-        nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR><C-W><C-W>
-    endif
-endfunction
-autocmd FileType * call LC_maps()
-" autocmd CursorMoved * if &previewwindow != 1 | pclose | endif
+" cargo install rust-script
+au FileType rust nnoremap <buffer> <F5> :w\|!rust-script %<cr>
+
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
+" let g:LanguageClient_serverCommands = {
+"     \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+"     \ 'python': ['pyls'],
+"     \ }
+" " apply key mappings to all filetypes supported by LanguageClient
+" function LC_maps()
+"     if has_key(g:LanguageClient_serverCommands, &filetype)
+"         nnoremap <silent> gd :call LanguageClient#textDocument_definition({'gotoCmd': 'tabnew'})<CR>
+"         nnoremap <silent> gh :call LanguageClient#textDocument_hover()<CR><C-W><C-W>
+"     endif
+" endfunction
+" autocmd FileType * call LC_maps()
+" " autocmd CursorMoved * if &previewwindow != 1 | pclose | endif
 
 Plug 'timonv/vim-cargo'
 " autocmd BufNewFile,BufReadPost main.rs setlocal filetype=cargo  textwidth=80
 au FileType cargo nnoremap <buffer> <F5> :CargoRun<cr>
 
-" Tables
+" === Tables
 " `:TableModeToggle` to enter table mode
 Plug 'dhruvasagar/vim-table-mode'
 " let g:table_mode_corner='|'  " markdown-compatible corners
@@ -340,6 +382,10 @@ au FileType sh map <buffer> <F5> :w\|!bash %<cr>
 
 " Sparql
 Plug 'rvesse/vim-sparql'
+
+"=== Writing
+" Distraction-free mode - adds `Goyo` command
+Plug 'junegunn/goyo.vim'
 
 call plug#end()
 
@@ -406,3 +452,67 @@ au BufWritePost *.md call MarkdownBlocks()
 
 " Leave paste mode when leaving insert mode
 autocmd InsertLeave * set nopaste
+
+
+" === LSP Code navigation shortcuts
+" as found in :help lsp
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+" rust-analyzer does not yet support goto declaration
+" re-mapped `gd` to definition
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+"nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+
+" have a fixed column for the diagnostics to appear in
+" this removes the jitter when warnings/errors flow in
+set signcolumn=yes
+
+" Set updatetime for CursorHold
+" 300ms of no cursor movement to trigger CursorHold
+set updatetime=300
+" Show diagnostic popup on cursor hover
+autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
+
+" Goto previous/next diagnostic warning/error
+nnoremap <silent> g[ <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> g] <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+
+" Enable type inlay hints
+autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *
+\ lua require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment" }
+
+" === Rust LSP
+
+" Configure LSP
+" https://github.com/neovim/nvim-lspconfig#rust_analyzer
+lua <<EOF
+
+-- nvim_lsp object
+local nvim_lsp = require'lspconfig'
+
+-- function to attach completion when setting up lsp
+local on_attach = function(client)
+    require'completion'.on_attach(client)
+end
+
+-- Enable rust_analyzer
+nvim_lsp.rust_analyzer.setup({ on_attach=on_attach })
+
+-- imbolc test
+nvim_lsp.pyls.setup({ on_attach=on_attach })
+
+-- Enable diagnostics
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = true,
+    signs = true,
+    update_in_insert = true,
+  }
+)
+EOF
