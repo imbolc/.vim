@@ -53,6 +53,7 @@ set mouse=
 imap <F5> <Esc><F5>
 filetype plugin indent on
 set spelllang=ru,en
+set number
 set relativenumber
 set shortmess+=c  " Avoid showing extra messages when using completion
 set signcolumn=no " Don't show an additional column signaling about errors on the left side
