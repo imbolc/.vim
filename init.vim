@@ -140,7 +140,6 @@ Plug 'tjdevries/lsp_extensions.nvim'
 " Autocompletion framework for built-in LSP
 Plug 'nvim-lua/completion-nvim'
 
-
 Plug 'editorconfig/editorconfig-vim'
 
 " Svelte
