@@ -22,6 +22,8 @@ set undolevels=500      " history of undos
 set title               " change the terminal's title
 set titleold=           " restore the title back on exit
 
+set inccommand=split    " preview substitutions[
+
 nnoremap Q <nop> " disable ex-mode
 
 " set statusline=%<%f%h%m%r%=\ %l,%c%V\ %P
@@ -140,6 +142,13 @@ Plug 'tjdevries/lsp_extensions.nvim'
 " Autocompletion framework for built-in LSP
 Plug 'nvim-lua/completion-nvim'
 
+" " Rust-tools related
+" Plug 'simrat39/rust-tools.nvim'
+" Plug 'nvim-lua/popup.nvim'
+" Plug 'nvim-lua/plenary.nvim'
+" Plug 'nvim-telescope/telescope.nvim'
+
+
 Plug 'editorconfig/editorconfig-vim'
 
 " Svelte
@@ -201,7 +210,8 @@ au FileType markdown setlocal wrap
 au FileType markdown setlocal spell
 au FileType markdown setlocal conceallevel=2
 au FileType markdown vnoremap g gq
-au FileType markdown map <buffer> <F5> :w\|!marked % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
+" cargo install comrak
+au FileType markdown map <buffer> <F5> :w\|!comrak --unsafe -e table % > /tmp/vim.md.html && xdg-open /tmp/vim.md.html<cr>
 " automatically reformat paragraph on leaving insert mode
 " au InsertLeave *.md normal gwap<CR>
 
@@ -310,8 +320,9 @@ Plug 'cespare/vim-toml'
 " === Rust
 au Filetype rust set colorcolumn=100
 Plug 'rust-lang/rust.vim', { 'for': [ 'rust' ], 'do': 'cargo install rustfmt' }
-let g:rustfmt_autosave = 1
-let g:rust_fold = 1
+let g:rustfmt_autosave = 1  " format code on save
+let g:rust_fold = 1  " turn on folding
+let g:rustfmt_fail_silently = 1  " prevent 'rustfmt' from populating the location-list with errors
 " au FileType rust nnoremap <buffer> <F5> :w\|!rustc --edition=2018 % -o /tmp/vim.rs && /tmp/vim.rs && rm /tmp/vim.rs<cr>
 
 " cargo install rust-script
@@ -342,7 +353,7 @@ au FileType cargo nnoremap <buffer> <F5> :CargoRun<cr>
 " === Tables
 " `:TableModeToggle` to enter table mode
 Plug 'dhruvasagar/vim-table-mode'
-" let g:table_mode_corner='|'  " markdown-compatible corners
+let g:table_mode_corner='|'  " markdown-compatible corners
 
 " Use `||` in insert mode to enter table mode
 function! s:isAtStartOfLine(mapping)
@@ -476,8 +487,9 @@ set signcolumn=yes
 " Set updatetime for CursorHold
 " 300ms of no cursor movement to trigger CursorHold
 set updatetime=300
-" Show diagnostic popup on cursor hover
-autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
+
+" TODO Show diagnostic popup on cursor hover
+" autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 
 " Goto previous/next diagnostic warning/error
 nnoremap <silent> g[ <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
@@ -502,17 +514,114 @@ local on_attach = function(client)
 end
 
 -- Enable rust_analyzer
-nvim_lsp.rust_analyzer.setup({ on_attach=on_attach })
+-- nvim_lsp.rust_analyzer.setup({ on_attach=on_attach })
+-- https://rust-analyzer.github.io/manual.html#nvim-lsp
+nvim_lsp.rust_analyzer.setup({
+    on_attach=on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            assist = {
+                importGranularity = "module",
+                importPrefix = "by_self",
+            },
+            cargo = {
+                loadOutDirsFromCheck = true
+            },
+            procMacro = {
+                enable = true
+            },
+        }
+    }
+})
 
 -- imbolc test
-nvim_lsp.pyls.setup({ on_attach=on_attach })
+-- nvim_lsp.pyls.setup({ on_attach=on_attach })
 
 -- Enable diagnostics
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
+    -- errors always visible right to the code line
     virtual_text = true,
+
+    -- show signs (as the left colume)
     signs = true,
-    update_in_insert = true,
+
+    -- update diagnostic in insert mode
+    update_in_insert = false,
   }
 )
+
+-- -- Rust tools
+-- local opts = {
+--     tools = { -- rust-tools options
+--         -- automatically set inlay hints (type hints)
+--         -- There is an issue due to which the hints are not applied on the first
+--         -- opened file. For now, write to the file to trigger a reapplication of
+--         -- the hints or just run :RustSetInlayHints.
+--         -- default: true
+--         autoSetHints = true,
+--
+--         -- whether to show hover actions inside the hover window
+--         -- this overrides the default hover handler
+--         -- default: true
+--         hover_with_actions = true,
+--
+--         runnables = {
+--             -- whether to use telescope for selection menu or not
+--             -- default: true
+--             use_telescope = true
+--
+--             -- rest of the opts are forwarded to telescope
+--         },
+--
+--         inlay_hints = {
+--             -- wheter to show parameter hints with the inlay hints or not
+--             -- default: true
+--             show_parameter_hints = true,
+--
+--             -- prefix for parameter hints
+--             -- default: "<-"
+--             parameter_hints_prefix = "← ",
+--
+--             -- prefix for all the other hints (type, chaining)
+--             -- default: "=>"
+--             other_hints_prefix  = "⇒ ",
+--
+--             -- whether to align to the lenght of the longest line in the file
+--             max_len_align = false,
+--
+--             -- padding from the left if max_len_align is true
+--             max_len_align_padding = 1,
+--
+--             -- whether to align to the extreme right or not
+--             right_align = false,
+--
+--             -- padding from the right if right_align is true
+--             right_align_padding = 7,
+--         },
+--
+--         hover_actions = {
+--             -- the border that is used for the hover window
+--             -- see vim.api.nvim_open_win()
+--             border = {
+--               {"╭", "FloatBorder"},
+--               {"─", "FloatBorder"},
+--               {"╮", "FloatBorder"},
+--               {"│", "FloatBorder"},
+--               {"╯", "FloatBorder"},
+--               {"─", "FloatBorder"},
+--               {"╰", "FloatBorder"},
+--               {"│", "FloatBorder"}
+--             },
+--         }
+--     },
+--
+--     -- all the opts to send to nvim-lspconfig
+--     -- these override the defaults set by rust-tools.nvim
+--     -- see https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#rust_analyzer
+--     server = {}, -- rust-analyer options
+-- }
+--
+-- require('rust-tools').setup(opts)
 EOF
+
