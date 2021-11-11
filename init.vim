@@ -264,11 +264,14 @@ if !exists('g:tcomment#filetype#map')
     let g:tcomment#filetype#map = {}
 endif
 let g:tcomment#filetype#map['svelte'] = 'html'
+let g:tcomment#filetype#map['json5'] = 'javascript'
 
 Plug 'powerman/vim-plugin-ruscmd'  " russian symbols in commands
 
 Plug 'junegunn/fzf', { 'do': './install --all' }
 map <leader>f :call fzf#run({'sink': 'tabedit'})<cr>
+
+Plug 'GutenYe/json5.vim'
 
 " === notes
 let notes_path = '~/Documents/scroll/'
